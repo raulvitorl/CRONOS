@@ -32,6 +32,10 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 public class Escolhedor extends JFrame implements ActionListener{
+	/**
+	 Commit teste comentário 
+	 */
+	
 	private static final long serialVersionUID = -7214032754820796452L;
 	static  String caminho,separador;
 	static int N;
