@@ -44,7 +44,6 @@ public class Escolhedor extends JFrame implements ActionListener{
 	JComboBox<String> listaIntervalos2 = new JComboBox<>();
 	ButtonGroup bgFiltros;
 	public Escolhedor(){
-		//TESTE DE VERSÃO
 		super("Particionador de Bases de Dados");
 		this.setBackground(new Color(245));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
