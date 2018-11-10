@@ -36,18 +36,22 @@ public class Escolhedor extends JFrame implements ActionListener{
 	private static final long serialVersionUID = -7214032754820796452L;
 	static  String caminho,separador;
 	static int N;
+
+	//Variavel de controle para evitar nullpointer, o processo só possegue se houver um arquivo selecionado
+	public boolean arquvoSelecionado=false,sucesso=true;
+
 	static ImageIcon icon = new ImageIcon(Escolhedor.class.getResource("loading.gif").getFile());
 	JButton btnBusca = new JButton();
 	JButton btnConfirma = new JButton();
-	
+
 	JPanel pnlBusca,pnlMetricas,pnlIntervalo,pnlRepartir;
 	JComboBox<String> listaMetricas = new JComboBox<>();	
-	
+
 	//Vetores para armazenar as unidades e intervalos
 	JComboBox<String> listaDeUnidades = new JComboBox<String>();
 
 	JComboBox<String> listaDeDuracao = new JComboBox<String>();
-	
+
 	ButtonGroup bgFiltros;
 	public Escolhedor(){
 		//TESTE DE VERSÃO
@@ -70,7 +74,7 @@ public class Escolhedor extends JFrame implements ActionListener{
 		pnlMetricas.add(listaMetricas);
 		pnlIntervalo = new JPanel();
 		pnlIntervalo.setLayout(new GridLayout(4, 2));
-		
+
 		pnlIntervalo.add(new JLabel("Unidade : "));
 		pnlIntervalo.add(listaDeUnidades);
 		listaDeUnidades.addItem("Dia(s)");
@@ -78,9 +82,9 @@ public class Escolhedor extends JFrame implements ActionListener{
 		listaDeUnidades.addItem("Ano(s)");
 		pnlIntervalo.add(new JLabel("Duracao : "));		
 		pnlIntervalo.add(listaDeDuracao);
-		
+
 		setListaDeDuracao(0);
-		
+
 		this.add(pnlBusca);
 		this.add(new JLabel("                                   "
 				+ "                                      Atributos"));
@@ -110,7 +114,7 @@ public class Escolhedor extends JFrame implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
-		
+
 		if(arg0.getSource()==listaDeUnidades){
 			listaDeDuracao.removeAllItems();
 			setListaDeDuracao(listaDeUnidades.getSelectedIndex());
@@ -169,9 +173,17 @@ public class Escolhedor extends JFrame implements ActionListener{
 					e1.printStackTrace();
 				}
 			}
+			arquvoSelecionado=true;
+
+
+			btnConfirma.setFocusable(true);
 		}
-				
-		if(arg0.getSource()==btnConfirma){
+
+		if(arg0.getSource()==btnConfirma && !arquvoSelecionado){
+			JOptionPane.showMessageDialog(null, "Selecione uma base!");
+		}
+
+		if(arg0.getSource()==btnConfirma && arquvoSelecionado){
 			JFileChooser escolheArquivo = new JFileChooser();
 			FileNameExtensionFilter filtro = new FileNameExtensionFilter("*csv", "csv");
 			escolheArquivo.setFileFilter(filtro);
@@ -191,15 +203,15 @@ public class Escolhedor extends JFrame implements ActionListener{
 
 	}
 
-public void setListaDeDuracao(int n) {
-		
+	public void setListaDeDuracao(int n) {
+
 		String[] vetMeses = {"1","2","3","4","5","6","7","8","9","10","11"};
 		String[] vetDias = 
-		{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15",
-		"16","17","18","19","20","21","22","23","24","25","26","27","28","29"
-		,"30","31"};
+			{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15",
+					"16","17","18","19","20","21","22","23","24","25","26","27","28","29"
+					,"30","31"};
 		String[] vetAnos = {"1","2","3","4","5","6","7","8","9","10"};
-		
+
 		if(n==0){
 			for(int i=0;i<vetDias.length;i++){
 				listaDeDuracao.addItem(vetDias[i]);
@@ -211,7 +223,7 @@ public void setListaDeDuracao(int n) {
 				listaDeDuracao.addItem(vetMeses[i]);
 			}
 		}
-		
+
 		if(n==2){
 			for(int i=0;i<vetAnos.length;i++){
 				listaDeDuracao.addItem(vetAnos[i]);
@@ -220,7 +232,10 @@ public void setListaDeDuracao(int n) {
 	}
 
 	public void GeraIntervalo(String primeiraData,String segundaData,int coluna,String caminhoFinal) throws Exception{
+
+
 		Date d1 = formataData(primeiraData);
+
 		Date d2 = formataData(segundaData);
 		File file = new File(caminho);
 		InputStream is = null;
@@ -246,7 +261,6 @@ public void setListaDeDuracao(int n) {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		int cont2=0;
 		while (s != null) {
 			textoSeparado=s.split(separador);
 			cont++;
@@ -267,11 +281,10 @@ public void setListaDeDuracao(int n) {
 				Date temp = null;
 				try {
 					try {
-						
-					temp = formataData(textoSeparado[coluna]);
-					} catch (ParseException pe) {JOptionPane.showMessageDialog(null, "Filtro Inválido!");}
+
+				temp = formataData(textoSeparado[coluna]);
+					} catch (ParseException pe) {JOptionPane.showMessageDialog(null, "Atributo não temporal!");sucesso=false;break;}
 					if(temp.after(d1) && temp.before(d2)){	
-						cont2++;
 						try {
 							for(int i=0;i<textoSeparado.length;i++){
 								System.out.println(i);
@@ -286,16 +299,18 @@ public void setListaDeDuracao(int n) {
 							osw.write("\r\n");
 						} catch (IOException e){e.printStackTrace();}
 					}
-				} catch (NullPointerException npe) {JOptionPane.showMessageDialog(null, "O indice informado no inicio está incorreto");}
+				} catch (NullPointerException npe) {JOptionPane.showMessageDialog(null, "Linha de inicio dos dados incorreta!");
+				sucesso=false;
+				break;
+				}
 			}
 			try {
 				s = br.readLine();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-		}		
-		JOptionPane.showMessageDialog(null, "Concluido");
-		JOptionPane.showMessageDialog(null, cont2+" Registros no intervalo");
+		}	
+		if(sucesso) {JOptionPane.showMessageDialog(null, "Concluido");}
 		try {
 			osw.close();
 			br.close();
@@ -310,8 +325,8 @@ public void setListaDeDuracao(int n) {
 		try {
 			DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'");
 			date = new java.sql.Date( ((java.util.Date)formatter.parse(data)).getTime() );
-		} catch (ParseException e) {            
-			JOptionPane.showMessageDialog(null, "O atributo selecionado não é suportado!");
+		} catch (ParseException e){            
+
 		}
 		return date;
 	}
