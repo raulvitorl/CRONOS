@@ -18,6 +18,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -38,10 +39,15 @@ public class Escolhedor extends JFrame implements ActionListener{
 	static ImageIcon icon = new ImageIcon(Escolhedor.class.getResource("loading.gif").getFile());
 	JButton btnBusca = new JButton();
 	JButton btnConfirma = new JButton();
+	
 	JPanel pnlBusca,pnlMetricas,pnlIntervalo,pnlRepartir;
-	JComboBox<String> listaMetricas = new JComboBox<>();
-	JComboBox<String> listaIntervalos1 = new JComboBox<>();
-	JComboBox<String> listaIntervalos2 = new JComboBox<>();
+	JComboBox<String> listaMetricas = new JComboBox<>();	
+	
+	//Vetores para armazenar as unidades e intervalos
+	JComboBox<String> listaDeUnidades = new JComboBox<String>();
+
+	JComboBox<String> listaDeDuracao = new JComboBox<String>();
+	
 	ButtonGroup bgFiltros;
 	public Escolhedor(){
 		//TESTE DE VERSÃO
@@ -64,13 +70,20 @@ public class Escolhedor extends JFrame implements ActionListener{
 		pnlMetricas.add(listaMetricas);
 		pnlIntervalo = new JPanel();
 		pnlIntervalo.setLayout(new GridLayout(4, 2));
-		pnlIntervalo.add(new JLabel("Entre : "));
-		pnlIntervalo.add(listaIntervalos1);
-		pnlIntervalo.add(new JLabel("E : "));		
-		pnlIntervalo.add(listaIntervalos2);
+		
+		pnlIntervalo.add(new JLabel("Unidade : "));
+		pnlIntervalo.add(listaDeUnidades);
+		listaDeUnidades.addItem("Dia(s)");
+		listaDeUnidades.addItem("Mês(es)");
+		listaDeUnidades.addItem("Ano(s)");
+		pnlIntervalo.add(new JLabel("Duracao : "));		
+		pnlIntervalo.add(listaDeDuracao);
+		
+		setListaDeDuracao(0);
+		
 		this.add(pnlBusca);
 		this.add(new JLabel("                                   "
-				+ "                                      Métricas"));
+				+ "                                      Atributos"));
 		this.add(pnlMetricas);
 		this.add(new JLabel("                                                  "
 				+ "                       Intervalo"));
@@ -79,6 +92,7 @@ public class Escolhedor extends JFrame implements ActionListener{
 		this.add(pnlRepartir);
 		btnBusca.addActionListener(this);
 		btnConfirma.addActionListener(this);
+		listaDeUnidades.addActionListener(this);
 		listaMetricas.addActionListener(this);
 		setLocationRelativeTo(null);
 		setVisible(true); 
@@ -96,9 +110,12 @@ public class Escolhedor extends JFrame implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent arg0) {
+		
+		if(arg0.getSource()==listaDeUnidades){
+			listaDeDuracao.removeAllItems();
+			setListaDeDuracao(listaDeUnidades.getSelectedIndex());
+		}		
 		if(arg0.getSource()==btnBusca){
-			listaIntervalos1.removeAllItems();
-			listaIntervalos2.removeAllItems();
 			listaMetricas.removeAllItems();			
 			JFileChooser escolheArquivo = new JFileChooser();
 			FileNameExtensionFilter filtro = new FileNameExtensionFilter("*csv", "csv");
@@ -153,14 +170,7 @@ public class Escolhedor extends JFrame implements ActionListener{
 				}
 			}
 		}
-		if(arg0.getSource()==listaMetricas){
-			listaIntervalos1.removeAllItems();
-			listaIntervalos2.removeAllItems();
-			getElementos(listaMetricas.getSelectedIndex());
-		}
-		if(arg0.getSource()==listaIntervalos1 || arg0.getSource()==listaIntervalos2){
-			getElementos(listaMetricas.getSelectedIndex());
-		}
+				
 		if(arg0.getSource()==btnConfirma){
 			JFileChooser escolheArquivo = new JFileChooser();
 			FileNameExtensionFilter filtro = new FileNameExtensionFilter("*csv", "csv");
@@ -172,59 +182,40 @@ public class Escolhedor extends JFrame implements ActionListener{
 			}
 			JOptionPane.showMessageDialog(null, "Efetuando Partição", "Aguarde", JOptionPane.INFORMATION_MESSAGE, icon);
 			try {
-				GeraIntervalo(listaIntervalos1.getSelectedItem().toString(), listaIntervalos2.getSelectedItem().toString(),listaMetricas.getSelectedIndex(),caminhofinal);
+				GeraIntervalo(listaDeUnidades.getSelectedItem().toString(), listaDeDuracao.getSelectedItem().toString(),listaMetricas.getSelectedIndex(),caminhofinal);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
-
 		}	
-
-
-
 
 	}
 
-	public void getElementos(int n){
-		File file = new File(caminho);
-		InputStream is = null;
-		try {
-			is = new FileInputStream(file);
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
+public void setListaDeDuracao(int n) {
+		
+		String[] vetMeses = {"1","2","3","4","5","6","7","8","9","10","11"};
+		String[] vetDias = 
+		{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15",
+		"16","17","18","19","20","21","22","23","24","25","26","27","28","29"
+		,"30","31"};
+		String[] vetAnos = {"1","2","3","4","5","6","7","8","9","10"};
+		
+		if(n==0){
+			for(int i=0;i<vetDias.length;i++){
+				listaDeDuracao.addItem(vetDias[i]);
+			}
 		}
-		InputStreamReader isr = new InputStreamReader(is);
-		BufferedReader br = new BufferedReader(isr);
-		String s = null;
-		int cont = 0;
-		String[] textoSeparado= {};
-		try {
-			s = br.readLine();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		while (s != null) {
-			textoSeparado=s.split(separador);
-			cont++;
-			if(cont>1){
-				try {
-					listaIntervalos1.addItem(textoSeparado[n]);
-					listaIntervalos2.addItem(textoSeparado[n]);
 
-				} catch (NullPointerException npe) {
-					JOptionPane.showMessageDialog(null, "O indice informado no inicio está incorreto");
-				}
-			}
-			try {
-				s = br.readLine();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+		if(n==1){
+			for(int i=0;i<vetMeses.length;i++){
+				listaDeDuracao.addItem(vetMeses[i]);
 			}
 		}
-		try {
-			br.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		
+		if(n==2){
+			for(int i=0;i<vetAnos.length;i++){
+				listaDeDuracao.addItem(vetAnos[i]);
+			}
 		}
 	}
 
@@ -320,7 +311,7 @@ public class Escolhedor extends JFrame implements ActionListener{
 			DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'");
 			date = new java.sql.Date( ((java.util.Date)formatter.parse(data)).getTime() );
 		} catch (ParseException e) {            
-			throw e;
+			JOptionPane.showMessageDialog(null, "O atributo selecionado não é suportado!");
 		}
 		return date;
 	}
