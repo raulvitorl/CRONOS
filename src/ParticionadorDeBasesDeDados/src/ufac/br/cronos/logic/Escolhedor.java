@@ -81,21 +81,31 @@ public class Escolhedor{
 
 	public boolean Particiona(File arquivoOrigem,String primeiraData,int QuantidadeIntervalo,int coluna,String caminhoFinal,String formato,String separador,String tipoIntervalo,int inicio) throws Exception{
 		int qtdArquivos=0;
-		formato = "yyyy-MM-dd";
+		formato = "yyyy-MM-dd HH:mm";
 		Date d1 = formataData(primeiraData,formato);
 		Calendar c2 = Calendar.getInstance();
 		Calendar c1 = Calendar.getInstance();
-		c1.setTime(d1);
+		try {
+			c1.setTime(d1);
+		} catch (NullPointerException npe) {
+			JOptionPane.showMessageDialog(null, "Atributo selecionado não temporal!");
+			return false;
+		}
+		
+		
 		c2.setTime(d1);
 
 		if(tipoIntervalo.equals("Dia(s)")){
 			c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo-1);
+			c2.add(Calendar.SECOND, 2);
 		}
 		if(tipoIntervalo.equals("Mês(es)")){
 			c2.add(Calendar.MONTH, QuantidadeIntervalo-1);
+			c2.add(Calendar.SECOND, 2);
 		}
 		if(tipoIntervalo.equals("Ano(s)")){
 			c2.add(Calendar.YEAR, QuantidadeIntervalo-1);
+			c2.add(Calendar.SECOND,2);
 		}
 
 		//System.out.println("Tipo de intervalo escolhido foi: "+tipoIntervalo);
@@ -153,12 +163,13 @@ public class Escolhedor{
 						
 						temp = formataData(textoSeparado[coluna],formato);
 						ctemp.setTime(temp);
-						System.out.println("DATA TEMPORARIA"+ctemp.getTime());
-					} catch (ParseException pe) {return false;}
-					if(ctemp.after(c1.getTime()) && ctemp.before(c2.getTime())){	
+						//Adicionando um milisegundo a data temporaria que foi tirada do arquivo para auxiliar na comparação
+						ctemp.add(Calendar.SECOND,1);
+						
+					} catch (ParseException pe) {pe.printStackTrace();}
+					if((ctemp.compareTo(c1)>0) && (ctemp.compareTo(c2)<0)){	
 						try {
 							for(int i=0;i<textoSeparado.length;i++){
-								System.out.println("Entrou na condição do corpo");
 								if(i==textoSeparado.length){
 									osw.write(textoSeparado[i]);
 								}
@@ -272,9 +283,7 @@ public class Escolhedor{
 		return true;
 	}
 
-	public static java.sql.Date formataData(String data,String formato) throws Exception { 
-		System.out.println("String data vinda do arquivo: "+data);
-		
+	public static java.sql.Date formataData(String data,String formato) throws Exception { 		
 		if (data == null || data.equals(""))
 			return null;
 		java.sql.Date date = null;
