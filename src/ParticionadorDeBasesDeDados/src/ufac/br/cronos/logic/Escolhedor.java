@@ -10,10 +10,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.sql.Date;
+import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -77,10 +79,24 @@ public class Escolhedor{
 
 	}
 	
-	public boolean Particiona(String primeiraData,String segundaData,int coluna,String caminhoFinal,String formato,String ArquivoDeOrigem,String separador) throws Exception{
+	public boolean Particiona(File file,String primeiraData,int QuantidadeIntervalo,int coluna,String caminhoFinal,String formato,String separador,String tipoIntervalo) throws Exception{
+		formato = "YYYY-MM-DD";
 		Date d1 = formataData(primeiraData,formato);
-		Date d2 = formataData(segundaData,formato);
-		File file = new File(ArquivoDeOrigem);
+		Calendar c2 = Calendar.getInstance();
+		Calendar c1 = Calendar.getInstance();
+		c1.setTime(d1);
+		c2.setTime(d1);
+		if(tipoIntervalo.equals("Dia(s)")){
+			c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo);
+		}
+		if(tipoIntervalo.equals("Mês(es)")){
+			c2.add(Calendar.MONTH, QuantidadeIntervalo);
+		}
+		if(tipoIntervalo.equals("Ano(s)")){
+			c2.add(Calendar.YEAR, QuantidadeIntervalo);
+		}
+		
+
 		InputStream is = null;
 		File file2 = new File(caminhoFinal);
 		OutputStream os = null;
@@ -120,14 +136,17 @@ public class Escolhedor{
 				}
 				osw.write("\r\n");
 			}
-			if(cont>1){
-				Date temp = null;
+			Date temp = null;
+			Calendar ctemp = Calendar.getInstance();
+			if(cont>1)
 				try {
 					try {
 
 				temp = formataData(textoSeparado[coluna],formato);
+				ctemp.setTime(temp);
+				
 					} catch (ParseException pe) {return false;}
-					if(temp.after(d1) && temp.before(d2)){	
+					if(ctemp.after(c1.getTime()) && ctemp.before(c2.getTime())){	
 						try {
 							for(int i=0;i<textoSeparado.length;i++){
 								System.out.println(i);
@@ -151,16 +170,49 @@ public class Escolhedor{
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-		}	
-		try {
-			osw.close();
-			br.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+			
+			try {
+				osw.close();
+				br.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			return true;
 		}
-		return true;
-	}
 	
+	
+	public String pegaPrimeiraData(File arquivo,int posicao,String separador,int inicio){
+		InputStream is = null;
+		try {
+			is = new FileInputStream(arquivo);
+		} catch (FileNotFoundException e1) {e1.printStackTrace();}
+		InputStreamReader isr = new InputStreamReader(is);
+		BufferedReader br = new BufferedReader(isr);
+		String s = null;
+		try {
+			s = br.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		int cont=0;
+		while(s!=null){
+			cont++;
+			String[] textoSeparado= s.split(separador);
+			if(cont>inicio){
+				return textoSeparado[posicao];
+			}
+				
+		}
+		
+		return null;
+			
+	}
+			
+	public File geraArquivo(String caminho){
+		File arquivo = new File(caminho);
+		return arquivo;
+	}
+		
 	public String EscolheArquivo(){
 		JFileChooser escolheArquivo = new JFileChooser();
 		FileNameExtensionFilter filtro = new FileNameExtensionFilter("*csv", "csv");
