@@ -118,10 +118,13 @@ public class FramePrincipal extends JFrame implements ActionListener{
 		if(e.getSource()==btnConfirma){
 			String caminhoFinal = Es.EscolheArquivo();
 			File f = Es.geraArquivo(caminho);
+			
 			String d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador,inicio);
+			
+			
 			System.out.println(d);
 			try {
-				Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex()+1, caminhoFinal, "YYYY-MM-DD", separador, listaDeUnidades.getSelectedItem().toString());
+				Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex(), caminhoFinal, "YYYY-MM-DD", separador, listaDeUnidades.getSelectedItem().toString());
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
