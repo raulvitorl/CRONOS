@@ -105,6 +105,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnBusca){
+			Es.DefineIntervalo("Dia(s)", listaDeDuracao);
 			caminho = Es.EscolheArquivo();
 			if(caminho!="") {
 				inicio = Integer.parseInt(JOptionPane.showInputDialog(null,"Em que linha iniciam os dados do arquivo?"));
@@ -118,9 +119,9 @@ public class FramePrincipal extends JFrame implements ActionListener{
 		if(e.getSource()==btnConfirma){
 			String caminhoFinal = Es.EscolheArquivo();
 			File f = Es.geraArquivo(caminho);
-			
+	
 			String d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador,inicio);
-			Es.DefineIntervalo("Dia(s)", listaDeDuracao);
+
 			
 			System.out.println(d);
 			try {
