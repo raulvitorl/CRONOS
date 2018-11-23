@@ -120,7 +120,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
 			File f = Es.geraArquivo(caminho);
 			
 			String d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador,inicio);
-			
+			Es.DefineIntervalo("Dia(s)", listaDeDuracao);
 			
 			System.out.println(d);
 			try {
