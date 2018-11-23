@@ -31,71 +31,78 @@ public class Escolhedor{
 		FileNameExtensionFilter filtro = new FileNameExtensionFilter("*csv", "csv");
 		escolheArquivo.setFileFilter(filtro);
 		//int resposta = escolheArquivo.showOpenDialog(new JDialog());
-			File file = new File(caminho);			 
-			InputStream is = null;
-			try {
-				is = new FileInputStream(file);
-			} catch (FileNotFoundException e1) {
-				return false;
-			}
-			InputStreamReader isr = new InputStreamReader(is);
-			BufferedReader br = new BufferedReader(isr);
-			String s = null;
-			int cont = 0,atributos=0;
-			String[] textoSeparado= {};
+		File file = new File(caminho);			 
+		InputStream is = null;
+		try {
+			is = new FileInputStream(file);
+		} catch (FileNotFoundException e1) {
+			return false;
+		}
+		InputStreamReader isr = new InputStreamReader(is);
+		BufferedReader br = new BufferedReader(isr);
+		String s = null;
+		int cont = 0,atributos=0;
+		String[] textoSeparado= {};
+		try {
+			s = br.readLine();
+		} catch (IOException e1) {
+			return false;
+		}
+		while (s != null) {
+			textoSeparado=s.split(separador);
+			cont++;
+			if(cont==inicio){
+				atributos = textoSeparado.length;
+				for(int i=0;i<atributos;i++){
+					try {
+						listaMetricas.addItem(textoSeparado[i]);
+					} catch (NullPointerException npe) {
+						npe.printStackTrace();
+					}
+
+				}
+			}				
+
 			try {
 				s = br.readLine();
 			} catch (IOException e1) {
-				return false;
-			}
-			while (s != null) {
-				textoSeparado=s.split(separador);
-				cont++;
-				if(cont==inicio){
-					atributos = textoSeparado.length;
-					for(int i=0;i<atributos;i++){
-						try {
-							listaMetricas.addItem(textoSeparado[i]);
-						} catch (NullPointerException npe) {
-							npe.printStackTrace();
-						}
-
-					}
-				}				
-
-				try {
-					s = br.readLine();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-			try {
-				br.close();
-			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-		
+		}
+		try {
+			br.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
 		return true;
 
 	}
-	
-	public boolean Particiona(File file,String primeiraData,int QuantidadeIntervalo,int coluna,String caminhoFinal,String formato,String separador,String tipoIntervalo) throws Exception{
-		formato = "YYYY-MM-DD";
+
+	public boolean Particiona(File arquivoOrigem,String primeiraData,int QuantidadeIntervalo,int coluna,String caminhoFinal,String formato,String separador,String tipoIntervalo,int inicio) throws Exception{
+		int qtdArquivos=0;
+		formato = "yyyy-MM-dd";
 		Date d1 = formataData(primeiraData,formato);
 		Calendar c2 = Calendar.getInstance();
 		Calendar c1 = Calendar.getInstance();
 		c1.setTime(d1);
 		c2.setTime(d1);
+
 		if(tipoIntervalo.equals("Dia(s)")){
-			c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo);
+			c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo-1);
 		}
 		if(tipoIntervalo.equals("Mês(es)")){
-			c2.add(Calendar.MONTH, QuantidadeIntervalo);
+			c2.add(Calendar.MONTH, QuantidadeIntervalo-1);
 		}
 		if(tipoIntervalo.equals("Ano(s)")){
-			c2.add(Calendar.YEAR, QuantidadeIntervalo);
+			c2.add(Calendar.YEAR, QuantidadeIntervalo-1);
 		}
-		
+
+		//System.out.println("Tipo de intervalo escolhido foi: "+tipoIntervalo);
+		//System.out.println("A quantidade foi: "+QuantidadeIntervalo);
+		//System.out.println("A primeira data encontrada no arquivo é: "+c1.getTime());
+		//System.out.println("Sendo assim, o primeiro intervalo é: ");
+		//System.out.println("De : "+c1.getTime()+" até "+c2.getTime());
 
 		InputStream is = null;
 		File file2 = new File(caminhoFinal);
@@ -108,7 +115,7 @@ public class Escolhedor{
 		} catch (FileNotFoundException e2) {e2.printStackTrace();}
 		OutputStreamWriter osw = new OutputStreamWriter(os);
 		try {
-			is = new FileInputStream(file);
+			is = new FileInputStream(arquivoOrigem);
 		} catch (FileNotFoundException e1) {e1.printStackTrace();}
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
@@ -123,66 +130,71 @@ public class Escolhedor{
 		while (s != null) {
 			textoSeparado=s.split(separador);
 			cont++;
-			//Escrevendo o cabeÃ§alho
+			//Cabeçalho do arquivo
 			if(cont==1){
 				for(int i=0;i<textoSeparado.length;i++){
-					if(i==textoSeparado.length){
-						osw.write(textoSeparado[i]);
-					}
-					if(i!=textoSeparado.length){
-						osw.write(textoSeparado[i]+",");
-					}
-
+					if(i==textoSeparado.length){osw.write(textoSeparado[i]);}
+					if(i!=textoSeparado.length){osw.write(textoSeparado[i]+",");}
 				}
 				osw.write("\r\n");
+				qtdArquivos++;
+				//Depois que escreve o cabeçalho, pula uma linha no arquivo
+				s = br.readLine();
+				
 			}
 			Date temp = null;
 			Calendar ctemp = Calendar.getInstance();
-			if(cont>1)
+
+			//Dados de fato
+			if(cont>inicio){
 				try {
 					try {
-				if(textoSeparado.length<2){
-					return false;
-				}		
-				temp = formataData(textoSeparado[coluna],formato);
-				ctemp.setTime(temp);
-				
+						if(textoSeparado.length<2){return false;}		
+						
+						temp = formataData(textoSeparado[coluna],formato);
+						ctemp.setTime(temp);
+						System.out.println("DATA TEMPORARIA"+ctemp.getTime());
 					} catch (ParseException pe) {return false;}
 					if(ctemp.after(c1.getTime()) && ctemp.before(c2.getTime())){	
 						try {
 							for(int i=0;i<textoSeparado.length;i++){
-								System.out.println(i);
+								System.out.println("Entrou na condição do corpo");
 								if(i==textoSeparado.length){
 									osw.write(textoSeparado[i]);
 								}
-								if(i!=textoSeparado.length){
-									osw.write(textoSeparado[i]+",");
-								}
-
+								if(i!=textoSeparado.length){osw.write(textoSeparado[i]+",");}
 							}
 							osw.write("\r\n");
 						} catch (IOException e){e.printStackTrace();}
 					}
-				} catch (NullPointerException npe) {JOptionPane.showMessageDialog(null, "Linha de inicio dos dados incorreta!");
-				return  false;
+				} catch (NullPointerException npe) {
+					npe.printStackTrace();
+					//JOptionPane.showMessageDialog(null, "Linha de inicio dos dados incorreta!");
+								
 				}
-			}
 			try {
 				s = br.readLine();
+				
+				
+				
+				
+				
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			
-			try {
-				osw.close();
-				br.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			return true;
 		}
-	
-	
+	}
+
+		try {
+			osw.close();
+			br.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		return true;
+	}
+
+
 	public String pegaPrimeiraData(File arquivo,int posicao,String separador,int inicio){
 		InputStream is = null;
 		try {
@@ -199,30 +211,29 @@ public class Escolhedor{
 		int cont=1;
 		while(s!=null){
 			cont++;
-			System.out.println(cont);
 			String[] textoSeparado= s.split(separador);
 			//Não sei por que mas o método só funcionou assim
 			if(cont>inicio+1){
 				return textoSeparado[posicao];
 			}
-			
+
 			try {
 				s = br.readLine();
 			} catch (IOException e){
 				e.printStackTrace();
 			}
-				
+
 		}
-		
+
 		return null;
-			
+
 	}
-			
+
 	public File geraArquivo(String caminho){
 		File arquivo = new File(caminho);
 		return arquivo;
 	}
-		
+
 	public String EscolheArquivo(){
 		JFileChooser escolheArquivo = new JFileChooser();
 		FileNameExtensionFilter filtro = new FileNameExtensionFilter("*csv", "csv");
@@ -240,7 +251,7 @@ public class Escolhedor{
 		}*/
 		return caminhofinal;
 	}
-	
+
 	public boolean DefineIntervalo(String tipoIntervalo,JComboBox<String> listaDeDuracao){
 		listaDeDuracao.removeAllItems();
 		if(tipoIntervalo.equals("Dia(s)")){
@@ -260,8 +271,10 @@ public class Escolhedor{
 		}
 		return true;
 	}
-	
+
 	public static java.sql.Date formataData(String data,String formato) throws Exception { 
+		System.out.println("String data vinda do arquivo: "+data);
+		
 		if (data == null || data.equals(""))
 			return null;
 		java.sql.Date date = null;
