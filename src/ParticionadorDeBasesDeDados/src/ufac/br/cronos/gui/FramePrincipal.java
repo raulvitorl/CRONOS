@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -48,7 +50,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(500, 550);
 		this.setResizable(false);
-		this.setLayout(new GridLayout(7, 1));
+		getContentPane().setLayout(new GridLayout(7, 1));
 		pnlBusca = new JPanel();
 		btnBusca.setText("Buscar Base");
 		btnConfirma.setText("Confirmar Divisão");
@@ -71,15 +73,13 @@ public class FramePrincipal extends JFrame implements ActionListener{
 		pnlIntervalo.add(new JLabel("Duracao : "));		
 		pnlIntervalo.add(listaDeDuracao);
 
-		this.add(pnlBusca);
-		this.add(new JLabel("                                   "
-				+ "                                      Atributos"));
-		this.add(pnlMetricas);
-		this.add(new JLabel("                                                  "
+		getContentPane().add(pnlBusca);
+		getContentPane().add(pnlMetricas);
+		getContentPane().add(new JLabel("                                                  "
 				+ "                       Intervalo"));
 
-		this.add(pnlIntervalo);
-		this.add(pnlRepartir);
+		getContentPane().add(pnlIntervalo);
+		getContentPane().add(pnlRepartir);
 		btnBusca.addActionListener(this);
 		btnConfirma.addActionListener(this);
 		listaDeUnidades.addActionListener(this);
@@ -116,7 +116,15 @@ public class FramePrincipal extends JFrame implements ActionListener{
 			}
 		}
 		if(e.getSource()==btnConfirma){
-			
+			String caminhoFinal = Es.EscolheArquivo();
+			File f = Es.geraArquivo(caminho);
+			String d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador,inicio);
+			System.out.println(d);
+			try {
+				Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex()+1, caminhoFinal, "YYYY-MM-DD", separador, listaDeUnidades.getSelectedItem().toString());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		}
 		if(e.getSource()==listaDeUnidades){
 			Es.DefineIntervalo(listaDeUnidades.getSelectedItem().toString(), listaDeDuracao);
