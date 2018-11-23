@@ -141,7 +141,9 @@ public class Escolhedor{
 			if(cont>1)
 				try {
 					try {
-
+				if(textoSeparado.length<2){
+					return false;
+				}		
 				temp = formataData(textoSeparado[coluna],formato);
 				ctemp.setTime(temp);
 				
