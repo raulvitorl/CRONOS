@@ -89,7 +89,7 @@ public class Escolhedor{
 		if(tipoIntervalo.equals("Dia(s)")){
 			c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo);
 		}
-		if(tipoIntervalo.equals("MÃªs(es)")){
+		if(tipoIntervalo.equals("Mês(es)")){
 			c2.add(Calendar.MONTH, QuantidadeIntervalo);
 		}
 		if(tipoIntervalo.equals("Ano(s)")){
@@ -194,12 +194,20 @@ public class Escolhedor{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		int cont=0;
+		int cont=1;
 		while(s!=null){
 			cont++;
+			System.out.println(cont);
 			String[] textoSeparado= s.split(separador);
-			if(cont>inicio){
+			//Não sei por que mas o método só funcionou assim
+			if(cont>inicio+1){
 				return textoSeparado[posicao];
+			}
+			
+			try {
+				s = br.readLine();
+			} catch (IOException e){
+				e.printStackTrace();
 			}
 				
 		}
@@ -238,7 +246,7 @@ public class Escolhedor{
 				listaDeDuracao.addItem(Integer.toString(i));
 			}
 		}
-		if(tipoIntervalo.equals("MÃªs(es)")){
+		if(tipoIntervalo.equals("Mês(es)")){
 			for(int i=1;i<12;i++){
 				listaDeDuracao.addItem(Integer.toString(i));
 			}
