@@ -79,8 +79,7 @@ public class Escolhedor{
 
 	}
 
-	public boolean Particiona(File arquivoOrigem,String primeiraData,int QuantidadeIntervalo,int coluna,String caminhoFinal,String formato,String separador,String tipoIntervalo,int inicio) throws Exception{
-		int qtdArquivos=0;
+	public boolean Particiona(File arquivoOrigem,String primeiraData,int QuantidadeIntervalo,int coluna,String caminhoFinal,String formato,String separador,String tipoIntervalo,int inicio) throws Exception{		
 		formato = "yyyy-MM-dd HH:mm";
 		Date d1 = formataData(primeiraData,formato);
 		Calendar c2 = Calendar.getInstance();
@@ -107,13 +106,6 @@ public class Escolhedor{
 			c2.add(Calendar.YEAR, QuantidadeIntervalo-1);
 			c2.add(Calendar.SECOND,2);
 		}
-
-		//System.out.println("Tipo de intervalo escolhido foi: "+tipoIntervalo);
-		//System.out.println("A quantidade foi: "+QuantidadeIntervalo);
-		//System.out.println("A primeira data encontrada no arquivo é: "+c1.getTime());
-		//System.out.println("Sendo assim, o primeiro intervalo é: ");
-		//System.out.println("De : "+c1.getTime()+" até "+c2.getTime());
-
 		InputStream is = null;
 		File file2 = new File(caminhoFinal);
 		OutputStream os = null;
@@ -147,7 +139,6 @@ public class Escolhedor{
 					if(i!=textoSeparado.length){osw.write(textoSeparado[i]+",");}
 				}
 				osw.write("\r\n");
-				qtdArquivos++;
 				//Depois que escreve o cabeçalho, pula uma linha no arquivo
 				s = br.readLine();
 				
@@ -160,6 +151,8 @@ public class Escolhedor{
 				try {
 					try {
 						if(textoSeparado.length<2){return false;}		
+						
+						
 						
 						temp = formataData(textoSeparado[coluna],formato);
 						ctemp.setTime(temp);
@@ -178,18 +171,13 @@ public class Escolhedor{
 							osw.write("\r\n");
 						} catch (IOException e){e.printStackTrace();}
 					}
+					
 				} catch (NullPointerException npe) {
-					npe.printStackTrace();
-					//JOptionPane.showMessageDialog(null, "Linha de inicio dos dados incorreta!");
-								
+					npe.printStackTrace();								
 				}
 			try {
 				s = br.readLine();
-				
-				
-				
-				
-				
+								
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -288,8 +276,8 @@ public class Escolhedor{
 			return null;
 		java.sql.Date date = null;
 		try {
-			//DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'");
-			DateFormat formatter = new SimpleDateFormat(formato);
+			DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'");
+			//DateFormat formatter = new SimpleDateFormat(formato);
 			date = new java.sql.Date( ((java.util.Date)formatter.parse(data)).getTime() );
 		} catch (ParseException e){            
 
