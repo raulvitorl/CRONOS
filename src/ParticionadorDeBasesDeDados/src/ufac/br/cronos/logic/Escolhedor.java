@@ -38,6 +38,9 @@ public class Escolhedor{
 		} catch (FileNotFoundException e1) {
 			return false;
 		}
+		
+		
+		
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
 		String s = null;
@@ -80,7 +83,9 @@ public class Escolhedor{
 	}
 
 	public boolean Particiona(File arquivoOrigem,String primeiraData,int QuantidadeIntervalo,int coluna,String caminhoFinal,String formato,String separador,String tipoIntervalo,int inicio) throws Exception{		
+		int numeroDoArquivo=0;
 		formato = "yyyy-MM-dd HH:mm";
+		
 		Date d1 = formataData(primeiraData,formato);
 		Calendar c2 = Calendar.getInstance();
 		Calendar c1 = Calendar.getInstance();
@@ -107,7 +112,7 @@ public class Escolhedor{
 			c2.add(Calendar.SECOND,2);
 		}
 		InputStream is = null;
-		File file2 = new File(caminhoFinal);
+		File file2 = new File(caminhoFinal+numeroDoArquivo+".csv");
 		OutputStream os = null;
 		try {
 			os = new FileOutputStream(file2, true);
@@ -158,6 +163,8 @@ public class Escolhedor{
 						ctemp.setTime(temp);
 						//Adicionando um milisegundo a data temporaria que foi tirada do arquivo para auxiliar na comparação
 						ctemp.add(Calendar.SECOND,1);
+						System.out.println("ANTES DO SE");
+						System.out.println("De : "+c1.getTime()+" até "+c2.getTime());
 						
 					} catch (ParseException pe) {pe.printStackTrace();}
 					if((ctemp.compareTo(c1)>0) && (ctemp.compareTo(c2)<0)){	
@@ -170,7 +177,7 @@ public class Escolhedor{
 							}
 							osw.write("\r\n");
 						} catch (IOException e){e.printStackTrace();}
-					}
+					}								
 					
 				} catch (NullPointerException npe) {
 					npe.printStackTrace();								
@@ -276,8 +283,8 @@ public class Escolhedor{
 			return null;
 		java.sql.Date date = null;
 		try {
-			DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'");
-			//DateFormat formatter = new SimpleDateFormat(formato);
+			//DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss'Z'");
+			DateFormat formatter = new SimpleDateFormat(formato);
 			date = new java.sql.Date( ((java.util.Date)formatter.parse(data)).getTime() );
 		} catch (ParseException e){            
 
