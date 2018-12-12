@@ -5,7 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Date;
+
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -14,15 +14,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
+
 
 import ufac.br.cronos.logic.Escolhedor;
 
 public class FramePrincipal extends JFrame implements ActionListener{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -961040415780285993L;
+	private static final long serialVersionUID = 1L;
 
 	static  String caminho,separador;
 
@@ -91,12 +88,6 @@ public class FramePrincipal extends JFrame implements ActionListener{
 
 
 	public static void main(String[] args) {
-		try {
-			UIManager.setLookAndFeel("com.jtattoo.plaf.luna.LunaLookAndFeel");
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
 		FramePrincipal fp = new FramePrincipal();
 		fp.setVisible(true);
 	}
@@ -105,7 +96,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnBusca){
-			Es.DefineIntervalo("Dia(s)", listaDeDuracao);
+			Es.DefineIntervalo(0, listaDeDuracao);
 			caminho = Es.EscolheArquivo();
 			if(caminho!="") {
 				inicio = Integer.parseInt(JOptionPane.showInputDialog(null,"Em que linha iniciam os dados do arquivo?"));
@@ -123,13 +114,13 @@ public class FramePrincipal extends JFrame implements ActionListener{
 			String d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador,inicio);
 
 			try {
-				Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex(), caminhoFinal, "YYYY-MM-DD", separador, listaDeUnidades.getSelectedItem().toString(),inicio);
+				Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex(), caminhoFinal, "YYYY-MM-DD", separador, listaDeUnidades.getSelectedIndex(),inicio);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		}
 		if(e.getSource()==listaDeUnidades){
-			Es.DefineIntervalo(listaDeUnidades.getSelectedItem().toString(), listaDeDuracao);
+			Es.DefineIntervalo(listaDeUnidades.getSelectedIndex(), listaDeDuracao);
 		}
 	}
 
