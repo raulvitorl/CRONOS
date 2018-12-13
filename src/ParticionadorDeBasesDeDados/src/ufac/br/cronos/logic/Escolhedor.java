@@ -82,7 +82,7 @@ public class Escolhedor{
 
 	}
 
-	public boolean Particiona(File arquivoOrigem,String primeiraData,int QuantidadeIntervalo,int coluna,String caminhoFinal,String formato,String separador,String tipoIntervalo,int inicio) throws Exception{		
+	public boolean Particiona(File arquivoOrigem,String primeiraData,int QuantidadeIntervalo,int coluna,String caminhoFinal,String formato,String separador,int tipoIntervalo,int inicio) throws Exception{		
 		int numeroDoArquivo=0;
 		formato = "yyyy-MM-dd HH:mm";
 		
@@ -92,22 +92,22 @@ public class Escolhedor{
 		try {
 			c1.setTime(d1);
 		} catch (NullPointerException npe) {
-			JOptionPane.showMessageDialog(null, "Atributo selecionado não temporal!");
+			JOptionPane.showMessageDialog(null, "Atributo selecionado nao temporal!");
 			return false;
 		}
 		
 		
 		c2.setTime(d1);
 
-		if(tipoIntervalo.equals("Dia(s)")){
+		if(tipoIntervalo==0){
 			c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo-1);
 			c2.add(Calendar.SECOND, 2);
 		}
-		if(tipoIntervalo.equals("Mês(es)")){
+		if(tipoIntervalo==1){
 			c2.add(Calendar.MONTH, QuantidadeIntervalo-1);
 			c2.add(Calendar.SECOND, 2);
 		}
-		if(tipoIntervalo.equals("Ano(s)")){
+		if(tipoIntervalo==2){
 			c2.add(Calendar.YEAR, QuantidadeIntervalo-1);
 			c2.add(Calendar.SECOND,2);
 		}
@@ -137,14 +137,14 @@ public class Escolhedor{
 		while (s != null) {
 			textoSeparado=s.split(separador);
 			cont++;
-			//Cabeçalho do arquivo
+			//CabeÃ§alho do arquivo
 			if(cont==1){
 				for(int i=0;i<textoSeparado.length;i++){
 					if(i==textoSeparado.length){osw.write(textoSeparado[i]);}
 					if(i!=textoSeparado.length){osw.write(textoSeparado[i]+",");}
 				}
 				osw.write("\r\n");
-				//Depois que escreve o cabeçalho, pula uma linha no arquivo
+				//Depois que escreve o cabeÃ§alho, pula uma linha no arquivo
 				s = br.readLine();
 				
 			}
@@ -161,10 +161,10 @@ public class Escolhedor{
 						
 						temp = formataData(textoSeparado[coluna],formato);
 						ctemp.setTime(temp);
-						//Adicionando um milisegundo a data temporaria que foi tirada do arquivo para auxiliar na comparação
+						//Adicionando um milisegundo a data temporaria que foi tirada do arquivo para auxiliar na comparaÃ§Ã£o
 						ctemp.add(Calendar.SECOND,1);
 						System.out.println("ANTES DO SE");
-						System.out.println("De : "+c1.getTime()+" até "+c2.getTime());
+						System.out.println("De : "+c1.getTime()+" atÃ© "+c2.getTime());
 						
 					} catch (ParseException pe) {pe.printStackTrace();}
 					if((ctemp.compareTo(c1)>0) && (ctemp.compareTo(c2)<0)){	
@@ -218,7 +218,7 @@ public class Escolhedor{
 		while(s!=null){
 			cont++;
 			String[] textoSeparado= s.split(separador);
-			//Não sei por que mas o método só funcionou assim
+			//NÃ£o sei por que mas o mÃ©todo sÃ³ funcionou assim
 			if(cont>inicio+1){
 				return textoSeparado[posicao];
 			}
@@ -249,7 +249,7 @@ public class Escolhedor{
 		if (resposta == JFileChooser.APPROVE_OPTION) {
 			caminhofinal = escolheArquivo.getSelectedFile().getPath().toString();
 		}
-		//JOptionPane.showMessageDialog(null, "Efetuando PartiÃ§Ã£o", "Aguarde", JOptionPane.INFORMATION_MESSAGE, icon);
+		//JOptionPane.showMessageDialog(null, "Efetuando PartiÃƒÂ§ÃƒÂ£o", "Aguarde", JOptionPane.INFORMATION_MESSAGE, icon);
 		/*try {
 			GeraIntervalo(listaDeUnidades.getSelectedItem().toString(), listaDeDuracao.getSelectedItem().toString(),listaMetricas.getSelectedIndex(),caminhofinal);
 		} catch (Exception e) {
@@ -258,23 +258,28 @@ public class Escolhedor{
 		return caminhofinal;
 	}
 
-	public boolean DefineIntervalo(String tipoIntervalo,JComboBox<String> listaDeDuracao){
+	public boolean DefineIntervalo(int tipoIntervalo,JComboBox<String> listaDeDuracao){
 		listaDeDuracao.removeAllItems();
-		if(tipoIntervalo.equals("Dia(s)")){
+		switch (tipoIntervalo) {
+		case 0:
 			for(int i=1;i<30;i++){
 				listaDeDuracao.addItem(Integer.toString(i));
 			}
-		}
-		if(tipoIntervalo.equals("Mês(es)")){
+			break;
+		case 1:
 			for(int i=1;i<12;i++){
 				listaDeDuracao.addItem(Integer.toString(i));
 			}
-		}
-		if(tipoIntervalo.equals("Ano(s)")){
-			for(int i=1;i<11;i++){
+			break;
+		case 2:
+			for(int i=1;i<12;i++){
 				listaDeDuracao.addItem(Integer.toString(i));
 			}
+			break;
+		default:
+			break;
 		}
+			
 		return true;
 	}
 

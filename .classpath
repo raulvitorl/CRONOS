@@ -2,6 +2,5 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src/ParticionadorDeBasesDeDados/src"/>
-	<classpathentry kind="lib" path="C:/Users/TESTE/Downloads/JTattoo-1.6.11.jar"/>
 	<classpathentry kind="output" path="src/ParticionadorDeBasesDeDados/bin"/>
 </classpath>
