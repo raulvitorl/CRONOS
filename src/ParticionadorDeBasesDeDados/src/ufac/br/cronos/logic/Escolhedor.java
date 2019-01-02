@@ -82,7 +82,6 @@ public class Escolhedor{
 
 	public boolean Particiona(File arquivoOrigem,String primeiraData,int QuantidadeIntervalo,int coluna,String caminhoFinal,String formato,String separador,int tipoIntervalo,int inicio) throws Exception{		
 		int numeroDoArquivo=0;
-		formato = "yyyy-MM-dd HH:mm";
 		
 		Date d1 = formataData(primeiraData,formato);
 		Calendar c2 = Calendar.getInstance();
@@ -290,5 +289,14 @@ public class Escolhedor{
  		}
  		return date;
  	}
+	
+	public void populaFormatos(JComboBox<String> listaDeFormatos){
+		listaDeFormatos.addItem("yyyy-MM-dd HH:mm");
+		listaDeFormatos.addItem("yyyy/MM/dd HH:mm");
+		listaDeFormatos.addItem("yyyy.MM.dd HH:mm");
+		listaDeFormatos.addItem("YYYY-MM-DD");
+		listaDeFormatos.addItem("YYYY/MM/DD");
+		listaDeFormatos.addItem("YYYY.MM.DD");		
+	}
 
 }

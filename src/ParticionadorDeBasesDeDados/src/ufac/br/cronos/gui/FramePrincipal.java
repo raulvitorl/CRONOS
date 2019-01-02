@@ -34,6 +34,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
 	JComboBox<String> listaDeUnidades = new JComboBox<String>();
 
 	JComboBox<String> listaDeDuracao = new JComboBox<String>();
+	JComboBox<String> listaDeFormatos = new JComboBox<String>();
 
 	ButtonGroup bgFiltros;
 
@@ -67,6 +68,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
 		listaDeUnidades.addItem("Ano(s)");
 		pnlIntervalo.add(new JLabel("Duracao : "));		
 		pnlIntervalo.add(listaDeDuracao);
+		pnlIntervalo.add(new JLabel("Formatos de Data aceitos : "));	
+		pnlIntervalo.add(listaDeFormatos);
 
 		getContentPane().add(pnlBusca);
 		getContentPane().add(pnlMetricas);
@@ -75,6 +78,9 @@ public class FramePrincipal extends JFrame implements ActionListener{
 
 		getContentPane().add(pnlIntervalo);
 		getContentPane().add(pnlRepartir);
+		listaDeDuracao.setEnabled(false);
+		listaDeFormatos.setEnabled(false);
+		listaDeUnidades.setEnabled(false);
 		btnBusca.addActionListener(this);
 		btnConfirma.addActionListener(this);
 		listaDeUnidades.addActionListener(this);
@@ -95,6 +101,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource()==btnBusca){
 			Es.DefineIntervalo(0, listaDeDuracao);
+			Es.populaFormatos(listaDeFormatos);
 			caminho = Es.EscolheArquivo();
 			if(caminho!="") {
 				inicio = JOptionPane.showInputDialog(null,"Em que linha iniciam os dados do arquivo?");
@@ -111,6 +118,11 @@ public class FramePrincipal extends JFrame implements ActionListener{
 				
 				boolean success = Es.PreencheMetricas(listaMetricas, separador, caminho, Integer.parseInt(inicio));
 				if(!success){JOptionPane.showMessageDialog(null,"Falha na captura do arquivo");}
+				if(success){
+					listaDeUnidades.setEnabled(true);
+					listaDeDuracao.setEnabled(true);
+					listaDeFormatos.setEnabled(true);
+				}
 			}else{
 				JOptionPane.showMessageDialog(null,"Selecione um arquivo!");
 			}
