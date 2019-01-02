@@ -19,7 +19,6 @@ import java.util.Calendar;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 public class Escolhedor{
 
@@ -31,53 +30,52 @@ public class Escolhedor{
 		FileNameExtensionFilter filtro = new FileNameExtensionFilter("*csv", "csv");
 		escolheArquivo.setFileFilter(filtro);
 		//int resposta = escolheArquivo.showOpenDialog(new JDialog());
-		File file = new File(caminho);			 
-		InputStream is = null;
-		try {
-			is = new FileInputStream(file);
-		} catch (FileNotFoundException e1) {
-			return false;
-		}
-		
-		
-		
-		InputStreamReader isr = new InputStreamReader(is);
-		BufferedReader br = new BufferedReader(isr);
-		String s = null;
-		int cont = 0,atributos=0;
-		String[] textoSeparado= {};
-		try {
-			s = br.readLine();
-		} catch (IOException e1) {
-			return false;
-		}
-		while (s != null) {
-			textoSeparado=s.split(separador);
-			cont++;
-			if(cont==inicio){
-				atributos = textoSeparado.length;
-				for(int i=0;i<atributos;i++){
-					try {
-						listaMetricas.addItem(textoSeparado[i]);
-					} catch (NullPointerException npe) {
-						npe.printStackTrace();
-					}
-
-				}
-			}				
-
+			File file = new File(caminho);			 
+			InputStream is = null;
+			try {
+				is = new FileInputStream(file);
+			} catch (FileNotFoundException e1) {
+				return false;
+			}
+			InputStreamReader isr = new InputStreamReader(is);
+			BufferedReader br = new BufferedReader(isr);
+			String s = null;
+			int cont = 0,atributos=0;
+			
 			try {
 				s = br.readLine();
+				
+			} catch (IOException e1) {
+				return false;
+			}
+			String[] textoSeparado = s.split(separador);
+			while (s != null){
+				cont++;
+				if(cont==inicio){
+					atributos = textoSeparado.length;
+					for(int i=0;i<atributos;i++){
+						try {
+							listaMetricas.addItem(textoSeparado[i]);
+							listaMetricas.setSelectedItem(i);
+						} catch (NullPointerException npe) {
+							npe.printStackTrace();
+						}
+
+					}
+				}				
+
+				try {
+					s = br.readLine();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+			try {
+				br.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-		}
-		try {
-			br.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-
+		
 		return true;
 
 	}

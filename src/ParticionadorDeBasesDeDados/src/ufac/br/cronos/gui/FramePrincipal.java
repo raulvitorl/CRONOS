@@ -21,9 +21,7 @@ import ufac.br.cronos.logic.Escolhedor;
 public class FramePrincipal extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
 
-	static  String caminho,separador;
-
-	static int inicio;
+	static  String caminho,separador,inicio;
 
 	Escolhedor Es = new Escolhedor();
 
@@ -99,9 +97,19 @@ public class FramePrincipal extends JFrame implements ActionListener{
 			Es.DefineIntervalo(0, listaDeDuracao);
 			caminho = Es.EscolheArquivo();
 			if(caminho!="") {
-				inicio = Integer.parseInt(JOptionPane.showInputDialog(null,"Em que linha iniciam os dados do arquivo?"));
+				inicio = JOptionPane.showInputDialog(null,"Em que linha iniciam os dados do arquivo?");
+				
+				if(inicio.isEmpty()){
+					inicio="1";
+				}
+				
 				separador = JOptionPane.showInputDialog(null,"Qual o simbolo separador do arquivo?");
-				boolean success = Es.PreencheMetricas(listaMetricas, separador, caminho, inicio);
+				
+				if(separador.isEmpty()){
+					separador=",";
+				}
+				
+				boolean success = Es.PreencheMetricas(listaMetricas, separador, caminho, Integer.parseInt(inicio));
 				if(!success){JOptionPane.showMessageDialog(null,"Falha na captura do arquivo");}
 			}else{
 				JOptionPane.showMessageDialog(null,"Selecione um arquivo!");
@@ -111,10 +119,10 @@ public class FramePrincipal extends JFrame implements ActionListener{
 			String caminhoFinal = Es.EscolheArquivo();
 			File f = Es.geraArquivo(caminho);
 	
-			String d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador,inicio);
+			String d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador,Integer.parseInt(inicio));
 
 			try {
-				Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex(), caminhoFinal, "YYYY-MM-DD", separador, listaDeUnidades.getSelectedIndex(),inicio);
+				Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex(), caminhoFinal, "YYYY-MM-DD", separador, listaDeUnidades.getSelectedIndex(),Integer.parseInt(inicio));
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
