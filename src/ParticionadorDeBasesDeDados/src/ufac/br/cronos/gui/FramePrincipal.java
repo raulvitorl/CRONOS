@@ -28,11 +28,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
 	JButton btnBusca = new JButton();
 	JButton btnConfirma = new JButton();
 	JPanel pnlBusca,pnlMetricas,pnlIntervalo,pnlRepartir;
-	JComboBox<String> listaMetricas = new JComboBox<>();	
-
-	//Vetores para armazenar as unidades e intervalos
+	JComboBox<String> listaMetricas = new JComboBox<String>();	
 	JComboBox<String> listaDeUnidades = new JComboBox<String>();
-
 	JComboBox<String> listaDeDuracao = new JComboBox<String>();
 	JComboBox<String> listaDeFormatos = new JComboBox<String>();
 
@@ -81,6 +78,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
 		listaDeDuracao.setEnabled(false);
 		listaDeFormatos.setEnabled(false);
 		listaDeUnidades.setEnabled(false);
+		btnConfirma.setEnabled(false);
+		listaMetricas.setEnabled(false);
 		btnBusca.addActionListener(this);
 		btnConfirma.addActionListener(this);
 		listaDeUnidades.addActionListener(this);
@@ -119,9 +118,11 @@ public class FramePrincipal extends JFrame implements ActionListener{
 				boolean success = Es.PreencheMetricas(listaMetricas, separador, caminho, Integer.parseInt(inicio));
 				if(!success){JOptionPane.showMessageDialog(null,"Falha na captura do arquivo");}
 				if(success){
+					listaMetricas.setEnabled(true);
 					listaDeUnidades.setEnabled(true);
 					listaDeDuracao.setEnabled(true);
 					listaDeFormatos.setEnabled(true);
+					btnConfirma.setEnabled(true);
 				}
 			}else{
 				JOptionPane.showMessageDialog(null,"Selecione um arquivo!");

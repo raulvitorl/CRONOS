@@ -81,8 +81,7 @@ public class Escolhedor{
 	}
 
 	public boolean Particiona(File arquivoOrigem,String primeiraData,int QuantidadeIntervalo,int coluna,String caminhoFinal,String formato,String separador,int tipoIntervalo,int inicio) throws Exception{		
-		int numeroDoArquivo=0;
-		
+		int numeroDoArquivo=0;		
 		Date d1 = formataData(primeiraData,formato);
 		Calendar c2 = Calendar.getInstance();
 		Calendar c1 = Calendar.getInstance();
@@ -104,13 +103,13 @@ public class Escolhedor{
 		}
 		
 		InputStream is = null;
-		File file2 = new File(caminhoFinal+numeroDoArquivo+".csv");
+		File file = new File(caminhoFinal+numeroDoArquivo+".csv");
 		OutputStream os = null;
 		try {
-			os = new FileOutputStream(file2, true);
+			os = new FileOutputStream(file, true);
 		} catch (FileNotFoundException e2) {e2.printStackTrace();}
 		try {
-			os = new FileOutputStream(file2, true);
+			os = new FileOutputStream(file, true);
 		} catch (FileNotFoundException e2) {e2.printStackTrace();}
 		OutputStreamWriter osw = new OutputStreamWriter(os);
 		try {
@@ -129,14 +128,14 @@ public class Escolhedor{
 		while (s != null) {
 			textoSeparado=s.split(separador);
 			cont++;
-			//CabeÃ§alho do arquivo
+			//Cabeçalho do arquivo
 			if(cont==1){
 				for(int i=0;i<textoSeparado.length;i++){
 					if(i==textoSeparado.length){osw.write(textoSeparado[i]);}
 					if(i!=textoSeparado.length){osw.write(textoSeparado[i]+",");}
 				}
 				osw.write("\r\n");
-				//Depois que escreve o cabeÃ§alho, pula uma linha no arquivo
+				//Depois que escreve o cabeçalho, pula uma linha no arquivo
 				s = br.readLine();
 				
 			}
@@ -152,13 +151,14 @@ public class Escolhedor{
 						if(textoSeparado.length<2){return false;}		
 						temp = formataData(textoSeparado[coluna],formato);
 						ctemp.setTime(temp);
-						//Adicionando um milisegundo a data temporaria que foi tirada do arquivo para auxiliar na comparaÃ§Ã£o
+						//Adicionando um milisegundo a data temporaria que foi tirada do arquivo para auxiliar na comparação
 						ctemp.add(Calendar.SECOND,1);
 						System.out.println("ANTES DO SE");
-						System.out.println("De : "+c1.getTime()+" atÃ© "+c2.getTime());
+						System.out.println("De : "+c1.getTime()+" até "+c2.getTime());
 						
 					} catch (ParseException pe) {pe.printStackTrace();}
 					if((ctemp.compareTo(c1)>0) && (ctemp.compareTo(c2)<0)){	
+						System.out.println("Data aceita: "+ctemp.getTime());
 						try {
 							for(int i=0;i<textoSeparado.length;i++){
 								if(i==textoSeparado.length){
@@ -168,7 +168,25 @@ public class Escolhedor{
 							}
 							osw.write("\r\n");
 						} catch (IOException e){e.printStackTrace();}
-					}								
+					}else {
+						numeroDoArquivo++;					
+						System.out.println("-----------------------------INTERVALO "+numeroDoArquivo+"-----------------------------");
+						
+						System.out.println("Ultima data desse intervalo"+ctemp.getTime());
+						System.out.println("Gerar proximo arquivo e novo intervalo");
+												
+						if(tipoIntervalo==0){c1.add(Calendar.DAY_OF_MONTH,1);}
+						if(tipoIntervalo==1){c1.add(Calendar.MONTH,1);}
+						if(tipoIntervalo==2){c1.add(Calendar.YEAR,1);}
+						
+						if(tipoIntervalo==0){c2.add(Calendar.DAY_OF_MONTH,1);}
+						if(tipoIntervalo==1){c2.add(Calendar.MONTH,1);}
+						if(tipoIntervalo==2){c2.add(Calendar.YEAR,1);}
+						System.out.println("De : "+c1.getTime()+" até "+c2.getTime());
+						file.delete();
+						
+						
+						}							
 					
 				} catch (NullPointerException npe) {
 					npe.printStackTrace();								
