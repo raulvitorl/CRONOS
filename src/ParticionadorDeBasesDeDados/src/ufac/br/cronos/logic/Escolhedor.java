@@ -14,6 +14,7 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.JComboBox;
@@ -103,15 +104,15 @@ public class Escolhedor{
 		}
 		
 		InputStream is = null;
-		File file = new File(caminhoFinal+numeroDoArquivo+".csv");
-		OutputStream os = null;
+		ArrayList<File> file = new ArrayList<File>();
+		ArrayList<OutputStream> os = new ArrayList<OutputStream>();
+		ArrayList<OutputStreamWriter> osw = new ArrayList<OutputStreamWriter>();		
+		
+		file.add(new File(caminhoFinal+numeroDoArquivo+".csv"));
 		try {
-			os = new FileOutputStream(file, true);
+			os.add(new FileOutputStream(file.get(numeroDoArquivo), true));
 		} catch (FileNotFoundException e2) {e2.printStackTrace();}
-		try {
-			os = new FileOutputStream(file, true);
-		} catch (FileNotFoundException e2) {e2.printStackTrace();}
-		OutputStreamWriter osw = new OutputStreamWriter(os);
+			osw.add(new OutputStreamWriter(os.get(numeroDoArquivo)));
 		try {
 			is = new FileInputStream(arquivoOrigem);
 		} catch (FileNotFoundException e1) {e1.printStackTrace();}
@@ -131,10 +132,10 @@ public class Escolhedor{
 			//Cabeçalho do arquivo
 			if(cont==1){
 				for(int i=0;i<textoSeparado.length;i++){
-					if(i==textoSeparado.length){osw.write(textoSeparado[i]);}
-					if(i!=textoSeparado.length){osw.write(textoSeparado[i]+",");}
+					if(i==textoSeparado.length){osw.get(numeroDoArquivo).write(textoSeparado[i]);}
+					if(i!=textoSeparado.length){osw.get(numeroDoArquivo).write(textoSeparado[i]+",");}
 				}
-				osw.write("\r\n");
+				osw.get(numeroDoArquivo).write("\r\n");
 				//Depois que escreve o cabeçalho, pula uma linha no arquivo
 				s = br.readLine();
 				
@@ -162,13 +163,13 @@ public class Escolhedor{
 						try {
 							for(int i=0;i<textoSeparado.length;i++){
 								if(i==textoSeparado.length){
-									osw.write(textoSeparado[i]);
+									osw.get(numeroDoArquivo).write(textoSeparado[i]);
 								}
-								if(i!=textoSeparado.length){osw.write(textoSeparado[i]+",");}
+								if(i!=textoSeparado.length){osw.get(numeroDoArquivo).write(textoSeparado[i]+",");}
 							}
-							osw.write("\r\n");
+							osw.get(numeroDoArquivo).write("\r\n");
 						} catch (IOException e){e.printStackTrace();}
-					}else {
+					}else{
 						numeroDoArquivo++;					
 						System.out.println("-----------------------------INTERVALO "+numeroDoArquivo+"-----------------------------");
 						
@@ -179,12 +180,27 @@ public class Escolhedor{
 						if(tipoIntervalo==1){c1.add(Calendar.MONTH,1);}
 						if(tipoIntervalo==2){c1.add(Calendar.YEAR,1);}
 						
-						if(tipoIntervalo==0){c2.add(Calendar.DAY_OF_MONTH,1);}
-						if(tipoIntervalo==1){c2.add(Calendar.MONTH,1);}
-						if(tipoIntervalo==2){c2.add(Calendar.YEAR,1);}
-						System.out.println("De : "+c1.getTime()+" até "+c2.getTime());
-						file.delete();
+						if(tipoIntervalo==0){c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo-1);}
+						if(tipoIntervalo==1){c2.add(Calendar.MONTH, QuantidadeIntervalo-1);}
+						if(tipoIntervalo==2){c2.add(Calendar.YEAR, QuantidadeIntervalo-1);}
 						
+						System.out.println("De : "+c1.getTime()+" até "+c2.getTime());
+						file.add(new File(caminhoFinal+numeroDoArquivo+".csv"));
+						try {
+							os.add(new FileOutputStream(file.get(numeroDoArquivo), true));
+						} catch (FileNotFoundException e2) {e2.printStackTrace();}
+							osw.add(new OutputStreamWriter(os.get(numeroDoArquivo)));
+							
+							try {
+								for(int i=0;i<textoSeparado.length;i++){
+									if(i==textoSeparado.length){
+										osw.get(numeroDoArquivo).write(textoSeparado[i]);
+									}
+									if(i!=textoSeparado.length){osw.get(numeroDoArquivo).write(textoSeparado[i]+",");}
+								}
+								osw.get(numeroDoArquivo).write("\r\n");
+							} catch (IOException e){e.printStackTrace();}
+							
 						
 						}							
 					
@@ -201,7 +217,9 @@ public class Escolhedor{
 	}
 
 		try {
-			osw.close();
+			for(OutputStreamWriter osr: osw){
+				osr.close();
+			}
 			br.close();
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -308,13 +326,33 @@ public class Escolhedor{
  		return date;
  	}
 	
-	public void populaFormatos(JComboBox<String> listaDeFormatos){
+	public void populaFormatos(JComboBox<String> listaDeFormatos) {
+		listaDeFormatos.addItem(("EUA"));
+		listaDeFormatos.addItem("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		listaDeFormatos.addItem("yyyy/MM/dd'T'HH:mm:ss'Z'");
+		listaDeFormatos.addItem("yyyy.MM.dd'T'HH:mm:ss'Z'");		
+		listaDeFormatos.addItem("yyyy-MM-dd HH:mm:ss");
+		listaDeFormatos.addItem("yyyy/MM/dd HH:mm:ss");
+		listaDeFormatos.addItem("yyyy.MM.dd HH:mm:ss");
 		listaDeFormatos.addItem("yyyy-MM-dd HH:mm");
 		listaDeFormatos.addItem("yyyy/MM/dd HH:mm");
 		listaDeFormatos.addItem("yyyy.MM.dd HH:mm");
 		listaDeFormatos.addItem("YYYY-MM-DD");
 		listaDeFormatos.addItem("YYYY/MM/DD");
-		listaDeFormatos.addItem("YYYY.MM.DD");		
+		listaDeFormatos.addItem("YYYY.MM.DD");
+		listaDeFormatos.addItem("BR");
+		listaDeFormatos.addItem("dd-MM-yyyy'T'HH:mm:ss'Z'");
+		listaDeFormatos.addItem("dd/MM/yyyy'T'HH:mm:ss'Z'");
+		listaDeFormatos.addItem("dd.MM.yyyy'T'HH:mm:ss'Z'");		
+		listaDeFormatos.addItem("dd-MM-yyyy HH:mm:ss");
+		listaDeFormatos.addItem("dd/MM/yyyy HH:mm:ss");
+		listaDeFormatos.addItem("dd.MM.yyyy HH:mm:ss");
+		listaDeFormatos.addItem("dd-MM-yyyy HH:mm");
+		listaDeFormatos.addItem("d/MM/yyyy HH:mm");
+		listaDeFormatos.addItem("d.MM.yyyy HH:mm");
+		listaDeFormatos.addItem("dd-MM-yyyy");
+		listaDeFormatos.addItem("dd/MM/yyyy");
+		listaDeFormatos.addItem("dd.MM.yyyy");
 	}
 
 }
