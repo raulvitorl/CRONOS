@@ -88,6 +88,7 @@ public class Escolhedor{
 		Calendar c1 = Calendar.getInstance();
 		
 		c1.setTime(d1);
+		System.out.println(c1.getTime());
 		c2.setTime(d1);
 
 		if(tipoIntervalo==0){
@@ -318,7 +319,7 @@ public class Escolhedor{
  			//DJANGO
  			//DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
  			//Arquivo Teste
- 			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+ 			DateFormat formatter = new SimpleDateFormat(formato);
  			date = new java.sql.Date( ((java.util.Date)formatter.parse(data)).getTime() );
  		} catch (ParseException e){            
  
