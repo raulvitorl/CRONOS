@@ -81,17 +81,8 @@ public class Escolhedor {
 
 	}
 
-	public boolean Particiona(
-		File arquivoOrigem, 
-		String primeiraData, 
-		int QuantidadeIntervalo, 
-		int coluna,
-		String caminhoFinal, 
-		String formato, 
-		String separador, 
-		int tipoIntervalo, 
-		int inicio
-		) throws Exception {
+	public boolean Particiona(File arquivoOrigem, String primeiraData, int QuantidadeIntervalo, int coluna,
+			String caminhoFinal, String formato, String separador, int tipoIntervalo, int inicio) throws Exception {
 		int numeroDoArquivo = 0;
 		Date d1 = formataData(primeiraData, formato);
 		Calendar c2 = Calendar.getInstance();
@@ -118,7 +109,7 @@ public class Escolhedor {
 		ArrayList<OutputStream> os = new ArrayList<OutputStream>();
 		ArrayList<OutputStreamWriter> osw = new ArrayList<OutputStreamWriter>();
 		file.add(new File(caminhoFinal + numeroDoArquivo + ".csv"));
-		
+
 		try {
 			os.add(new FileOutputStream(file.get(numeroDoArquivo), true));
 		} catch (FileNotFoundException e2) {
@@ -134,7 +125,6 @@ public class Escolhedor {
 		BufferedReader br = new BufferedReader(isr);
 		String s = null;
 		int cont = 0;
-		boolean arquivo=true;
 		String[] textoSeparado = {};
 		String[] cabecalho = {};
 		try {
@@ -147,9 +137,6 @@ public class Escolhedor {
 			// Cabeçalho do arquivo
 			if (cont == 1) {
 				cabecalho = s.split(separador);
-			}
-			
-			if(arquivo){
 				for (int i = 0; i < cabecalho.length; i++) {
 					if (i == cabecalho.length) {
 						osw.get(numeroDoArquivo).write(cabecalho[i]);
@@ -160,17 +147,13 @@ public class Escolhedor {
 				}
 				osw.get(numeroDoArquivo).write("\r\n");
 				// Depois que escreve o cabeçalho, pula uma linha no arquivo
-				s = br.readLine();
-				arquivo=false;
+
 			}
-			
-			textoSeparado = s.split(separador);
-
-			Date temp = null;
-			Calendar ctemp = Calendar.getInstance();
-
 			// Dados de fato
-			if (!arquivo) {
+			if (cont > inicio) {
+				textoSeparado = s.split(separador);
+				Date temp = new Date();
+				Calendar ctemp = Calendar.getInstance();
 				try {
 					try {
 						if (textoSeparado.length < 2) {
@@ -238,22 +221,46 @@ public class Escolhedor {
 							e2.printStackTrace();
 						}
 						osw.add(new OutputStreamWriter(os.get(numeroDoArquivo)));
-						// Depois que escreve o cabeçalho, pula uma linha no arquivo
-						arquivo=true;
-						s = br.readLine();						
 
+						try {
+							for (int i = 0; i < cabecalho.length; i++) {
+								if (i == cabecalho.length) {
+									osw.get(numeroDoArquivo).write(cabecalho[i]);
+								}
+								if (i != cabecalho.length) {
+									osw.get(numeroDoArquivo).write(cabecalho[i] + ",");
+								}
+							}
+							osw.get(numeroDoArquivo).write("\r\n");
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+						try {
+							for (int i = 0; i < textoSeparado.length; i++) {
+								if (i == textoSeparado.length) {
+									osw.get(numeroDoArquivo).write(textoSeparado[i]);
+								}
+								if (i != textoSeparado.length) {
+									osw.get(numeroDoArquivo).write(textoSeparado[i] + ",");
+								}
+							}
+							osw.get(numeroDoArquivo).write("\r\n");
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 
 					}
 
 				} catch (NullPointerException npe) {
 					npe.printStackTrace();
 				}
-				try {
-					s = br.readLine();
+			}
+			try {
+				s = br.readLine();
 
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+			} catch (IOException e1) {
+				e1.printStackTrace();
 			}
 		}
 
