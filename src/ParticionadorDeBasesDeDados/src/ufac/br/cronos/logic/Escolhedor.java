@@ -10,16 +10,17 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Escolhedor {
@@ -30,7 +31,6 @@ public class Escolhedor {
 		JFileChooser escolheArquivo = new JFileChooser();
 		FileNameExtensionFilter filtro = new FileNameExtensionFilter("*csv", "csv");
 		escolheArquivo.setFileFilter(filtro);
-		// int resposta = escolheArquivo.showOpenDialog(new JDialog());
 		File file = new File(caminho);
 		InputStream is = null;
 		try {
@@ -82,25 +82,35 @@ public class Escolhedor {
 	}
 
 	public boolean Particiona(File arquivoOrigem, String primeiraData, int QuantidadeIntervalo, int coluna,
-			String caminhoFinal, String formato, String separador, int tipoIntervalo, int inicio) throws Exception {
+			String caminhoFinal, String formato, String separador, int tipoIntervalo, int inicio, String ultimaData)
+			throws Exception {
 		int numeroDoArquivo = 0;
 		Date d1 = formataData(primeiraData, formato);
+		Date dataFinal = formataData(ultimaData, formato);
 		Calendar c2 = Calendar.getInstance();
 		Calendar c1 = Calendar.getInstance();
+		Calendar ctemp2 = Calendar.getInstance();
 
 		c1.setTime(d1);
 		c2.setTime(d1);
+		ctemp2.setTime(d1);
 
 		if (tipoIntervalo == 0) {
 			c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo - 1);
+			ctemp2.add(Calendar.DAY_OF_MONTH, 1);
+			ctemp2.add(Calendar.SECOND, 1);
 			c2.add(Calendar.SECOND, 2);
 		}
 		if (tipoIntervalo == 1) {
 			c2.add(Calendar.MONTH, QuantidadeIntervalo - 1);
+			ctemp2.add(Calendar.MONTH, 1);
+			ctemp2.add(Calendar.SECOND, 1);
 			c2.add(Calendar.SECOND, 2);
 		}
 		if (tipoIntervalo == 2) {
 			c2.add(Calendar.YEAR, QuantidadeIntervalo - 1);
+			ctemp2.add(Calendar.YEAR, 1);
+			ctemp2.add(Calendar.SECOND, 1);
 			c2.add(Calendar.SECOND, 2);
 		}
 
@@ -129,18 +139,26 @@ public class Escolhedor {
 		String[] cabecalho = {};
 		try {
 			s = br.readLine();
+			br.mark(5000);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+
 		while (s != null) {
 			cont++;
+			if (cont > 200) {
+				break;
+			}
 			// Cabeçalho do arquivo
 			if (cont == 1) {
 				cabecalho = s.split(separador);
+
 				for (int i = 0; i < cabecalho.length; i++) {
+
 					if (i == cabecalho.length) {
 						osw.get(numeroDoArquivo).write(cabecalho[i]);
 					}
+
 					if (i != cabecalho.length) {
 						osw.get(numeroDoArquivo).write(cabecalho[i] + ",");
 					}
@@ -154,6 +172,7 @@ public class Escolhedor {
 				textoSeparado = s.split(separador);
 				Date temp = new Date();
 				Calendar ctemp = Calendar.getInstance();
+
 				try {
 					try {
 						if (textoSeparado.length < 2) {
@@ -170,6 +189,13 @@ public class Escolhedor {
 					} catch (ParseException pe) {
 						pe.printStackTrace();
 					}
+					System.out.println(
+							"DATA TEMPORARIA : " + ctemp.getTime() + " E A DATA DE DIVISÃO :" + ctemp2.getTime());
+					if (ctemp.equals((ctemp2))) {
+						br.mark(5000);
+						JOptionPane.showMessageDialog(null, "DATA PARA ONDE DEVE VOLTAR É: " + textoSeparado[coluna]);
+					}
+
 					if ((ctemp.compareTo(c1) > 0) && (ctemp.compareTo(c2) < 0)) {
 						System.out.println("Data aceita: " + ctemp.getTime());
 						try {
@@ -185,71 +211,75 @@ public class Escolhedor {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
+
 					} else {
-						numeroDoArquivo++;
-						System.out.println("-----------------------------INTERVALO " + numeroDoArquivo
-								+ "-----------------------------");
 
-						System.out.println("Ultima data desse intervalo" + ctemp.getTime());
-						System.out.println("Gerar proximo arquivo e novo intervalo");
+						if (!textoSeparado[coluna].equals(ultimaData)) {
+							br.reset();
+							System.out.println("REGISTRO MARCADO: " + s);
+							numeroDoArquivo++;
+							System.out.println("-----------------------------INTERVALO " + numeroDoArquivo
+									+ "-----------------------------");
 
-						if (tipoIntervalo == 0) {
-							c1.add(Calendar.DAY_OF_MONTH, 1);
-						}
-						if (tipoIntervalo == 1) {
-							c1.add(Calendar.MONTH, 1);
-						}
-						if (tipoIntervalo == 2) {
-							c1.add(Calendar.YEAR, 1);
-						}
+							System.out.println("Ultima data desse intervalo" + ctemp.getTime());
+							System.out.println("Gerar proximo arquivo e novo intervalo");
 
-						if (tipoIntervalo == 0) {
-							c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo - 1);
-						}
-						if (tipoIntervalo == 1) {
-							c2.add(Calendar.MONTH, QuantidadeIntervalo - 1);
-						}
-						if (tipoIntervalo == 2) {
-							c2.add(Calendar.YEAR, QuantidadeIntervalo - 1);
-						}
+							if (tipoIntervalo == 0) {
+								c1.add(Calendar.DAY_OF_MONTH, 1);
+								c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo - 2);
+								ctemp2.add(Calendar.DAY_OF_MONTH, 1);
 
-						System.out.println("De : " + c1.getTime() + " até " + c2.getTime());
-						file.add(new File(caminhoFinal + numeroDoArquivo + ".csv"));
-						try {
-							os.add(new FileOutputStream(file.get(numeroDoArquivo), true));
-						} catch (FileNotFoundException e2) {
-							e2.printStackTrace();
-						}
-						osw.add(new OutputStreamWriter(os.get(numeroDoArquivo)));
-
-						try {
-							for (int i = 0; i < cabecalho.length; i++) {
-								if (i == cabecalho.length) {
-									osw.get(numeroDoArquivo).write(cabecalho[i]);
-								}
-								if (i != cabecalho.length) {
-									osw.get(numeroDoArquivo).write(cabecalho[i] + ",");
-								}
 							}
-							osw.get(numeroDoArquivo).write("\r\n");
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						
-						try {
-							for (int i = 0; i < textoSeparado.length; i++) {
-								if (i == textoSeparado.length) {
-									osw.get(numeroDoArquivo).write(textoSeparado[i]);
-								}
-								if (i != textoSeparado.length) {
-									osw.get(numeroDoArquivo).write(textoSeparado[i] + ",");
-								}
+							if (tipoIntervalo == 1) {
+								c1.add(Calendar.MONTH, 1);
+								c2.add(Calendar.MONTH, QuantidadeIntervalo - 2);
+								ctemp2.add(Calendar.MONTH, 1);
 							}
-							osw.get(numeroDoArquivo).write("\r\n");
-						} catch (IOException e) {
-							e.printStackTrace();
+							if (tipoIntervalo == 2) {
+								c1.add(Calendar.YEAR, 1);
+								c2.add(Calendar.YEAR, QuantidadeIntervalo - 2);
+								ctemp2.add(Calendar.YEAR, 1);
+							}
+
+							System.out.println("De : " + c1.getTime() + " até " + c2.getTime());
+							file.add(new File(caminhoFinal + numeroDoArquivo + ".csv"));
+							try {
+								os.add(new FileOutputStream(file.get(numeroDoArquivo), true));
+							} catch (FileNotFoundException e2) {
+								e2.printStackTrace();
+							}
+							osw.add(new OutputStreamWriter(os.get(numeroDoArquivo)));
+
+							try {
+								for (int i = 0; i < cabecalho.length; i++) {
+									if (i == cabecalho.length) {
+										osw.get(numeroDoArquivo).write(cabecalho[i]);
+									}
+									if (i != cabecalho.length) {
+										osw.get(numeroDoArquivo).write(cabecalho[i] + ",");
+									}
+								}
+								osw.get(numeroDoArquivo).write("\r\n");
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+
+							/*
+							 * try { for (int i = 0; i < textoSeparado.length; i++) { if (i ==
+							 * textoSeparado.length) { osw.get(numeroDoArquivo).write(textoSeparado[i]); }
+							 * if (i != textoSeparado.length) {
+							 * osw.get(numeroDoArquivo).write(textoSeparado[i] + ","); } }
+							 * osw.get(numeroDoArquivo).write("\r\n"); } catch (IOException e) {
+							 * e.printStackTrace(); }
+							 */
+
 						}
 
+						if (textoSeparado[coluna].equals(ultimaData)) {
+							break;
+						}
+
+						System.out.println("Data atual armazenada: " + s);
 					}
 
 				} catch (NullPointerException npe) {
@@ -308,7 +338,39 @@ public class Escolhedor {
 		}
 
 		return null;
+	}
 
+	public String pegaUltimaData(File arquivo, int posicao, String separador, int inicio) {
+		InputStream is = null;
+
+		try {
+			is = new FileInputStream(arquivo);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+		InputStreamReader isr = new InputStreamReader(is);
+		BufferedReader br = new BufferedReader(isr);
+		String s = null;
+		try {
+			s = br.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		while (s != null) {
+			String[] textoSeparado = s.split(separador);
+			try {
+				s = br.readLine();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			if (s == null) {
+				return textoSeparado[posicao];
+			}
+
+		}
+
+		return null;
 	}
 
 	public File geraArquivo(String caminho) {

@@ -133,10 +133,13 @@ public class FramePrincipal extends JFrame implements ActionListener{
 			File f = Es.geraArquivo(caminho);
 	
 			String d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador,Integer.parseInt(inicio));
-			System.out.println(d);
+			String d2 = Es.pegaUltimaData(f, listaMetricas.getSelectedIndex(), separador,Integer.parseInt(inicio));
+			
+			System.out.println("Primeira data do arquivo :"+d);
+			System.out.println("Ultima data do arquivo: "+d2);
 
 			try {
-				Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex(), caminhoFinal, "YYYY-MM-DD", separador, listaDeUnidades.getSelectedIndex(),Integer.parseInt(inicio));
+				Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex(), caminhoFinal, listaDeFormatos.getSelectedItem().toString(), separador, listaDeUnidades.getSelectedIndex(),Integer.parseInt(inicio),d2);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
