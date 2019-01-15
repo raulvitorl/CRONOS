@@ -146,9 +146,7 @@ public class Escolhedor {
 
 		while (s != null) {
 			cont++;
-			if (cont > 200) {
-				break;
-			}
+
 			// Cabeçalho do arquivo
 			if (cont == 1) {
 				cabecalho = s.split(separador);
@@ -183,21 +181,22 @@ public class Escolhedor {
 						// Adicionando um milisegundo a data temporaria que foi tirada do arquivo para
 						// auxiliar na comparação
 						ctemp.add(Calendar.SECOND, 1);
-						System.out.println("ANTES DO SE");
+						// System.out.println("ANTES DO SE");
 						System.out.println("De : " + c1.getTime() + " até " + c2.getTime());
 
 					} catch (ParseException pe) {
 						pe.printStackTrace();
 					}
-					System.out.println(
-							"DATA TEMPORARIA : " + ctemp.getTime() + " E A DATA DE DIVISÃO :" + ctemp2.getTime());
+					// System.out.println(
+					// "DATA TEMPORARIA : " + ctemp.getTime() + " E A DATA DE DIVISÃO :" +
+					// ctemp2.getTime());
 					if (ctemp.equals((ctemp2))) {
 						br.mark(5000);
-						JOptionPane.showMessageDialog(null, "DATA PARA ONDE DEVE VOLTAR É: " + textoSeparado[coluna]);
+						//JOptionPane.showMessageDialog(null, "DATA PARA ONDE DEVE VOLTAR É: " + textoSeparado[coluna]);
 					}
 
 					if ((ctemp.compareTo(c1) > 0) && (ctemp.compareTo(c2) < 0)) {
-						System.out.println("Data aceita: " + ctemp.getTime());
+						// System.out.println("Data aceita: " + ctemp.getTime());
 						try {
 							for (int i = 0; i < textoSeparado.length; i++) {
 								if (i == textoSeparado.length) {
@@ -216,28 +215,29 @@ public class Escolhedor {
 
 						if (!textoSeparado[coluna].equals(ultimaData)) {
 							br.reset();
-							System.out.println("REGISTRO MARCADO: " + s);
+							// System.out.println("REGISTRO MARCADO: " + s);
 							numeroDoArquivo++;
-							System.out.println("-----------------------------INTERVALO " + numeroDoArquivo
-									+ "-----------------------------");
+							// System.out.println("-----------------------------INTERVALO " +
+							// numeroDoArquivo
+							// + "-----------------------------");
 
-							System.out.println("Ultima data desse intervalo" + ctemp.getTime());
+							// System.out.println("Ultima data desse intervalo" + ctemp.getTime());
 							System.out.println("Gerar proximo arquivo e novo intervalo");
 
 							if (tipoIntervalo == 0) {
 								c1.add(Calendar.DAY_OF_MONTH, 1);
-								c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo - 2);
+								c2.add(Calendar.DAY_OF_MONTH, 1);
 								ctemp2.add(Calendar.DAY_OF_MONTH, 1);
 
 							}
 							if (tipoIntervalo == 1) {
 								c1.add(Calendar.MONTH, 1);
-								c2.add(Calendar.MONTH, QuantidadeIntervalo - 2);
+								c2.add(Calendar.MONTH, 1);
 								ctemp2.add(Calendar.MONTH, 1);
 							}
 							if (tipoIntervalo == 2) {
 								c1.add(Calendar.YEAR, 1);
-								c2.add(Calendar.YEAR, QuantidadeIntervalo - 2);
+								c2.add(Calendar.YEAR, 1);
 								ctemp2.add(Calendar.YEAR, 1);
 							}
 
@@ -279,7 +279,7 @@ public class Escolhedor {
 							break;
 						}
 
-						System.out.println("Data atual armazenada: " + s);
+						// System.out.println("Data atual armazenada: " + s);
 					}
 
 				} catch (NullPointerException npe) {
