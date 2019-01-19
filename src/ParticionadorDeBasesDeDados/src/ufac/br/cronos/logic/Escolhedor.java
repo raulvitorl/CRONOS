@@ -20,9 +20,12 @@ import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Escolhedor {
+
+	private BufferedReader br;
 
 	@SuppressWarnings("resource")
 	public boolean PreencheMetricas(JComboBox<String> listaMetricas, String separador, String caminho, int inicio) {
@@ -89,11 +92,22 @@ public class Escolhedor {
 		Calendar c1 = Calendar.getInstance();
 		Calendar ctemp2 = Calendar.getInstance();
 
-		c1.setTime(d1);
+		if(d1==null){
+			return false;
+		}
+		
+		try {
+			c1.setTime(d1);
+		} catch (NullPointerException npe) {
+			JOptionPane.showMessageDialog(null,"Atributo não temporal selecionado");
+			return false;
+		}
+		
+		
 		c2.setTime(d1);
 		ctemp2.setTime(d1);
 
-		if (formato.length()==19) {
+		if (formato.length() == 19) {
 			if (tipoIntervalo == 0) {
 				c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo - 1);
 				ctemp2.add(Calendar.DAY_OF_MONTH, 1);
@@ -107,13 +121,13 @@ public class Escolhedor {
 				c2.add(Calendar.SECOND, 2);
 			}
 			if (tipoIntervalo == 2) {
-				c2.add(Calendar.YEAR, QuantidadeIntervalo );
+				c2.add(Calendar.YEAR, QuantidadeIntervalo);
 				ctemp2.add(Calendar.YEAR, 1);
 				ctemp2.add(Calendar.SECOND, 1);
 				c2.add(Calendar.SECOND, 2);
 			}
 
-		}else{
+		} else {
 			if (tipoIntervalo == 0) {
 				c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo - 1);
 				ctemp2.add(Calendar.DAY_OF_MONTH, 1);
@@ -127,7 +141,7 @@ public class Escolhedor {
 				c2.add(Calendar.SECOND, 1);
 			}
 			if (tipoIntervalo == 2) {
-				c2.add(Calendar.YEAR, QuantidadeIntervalo );
+				c2.add(Calendar.YEAR, QuantidadeIntervalo);
 				ctemp2.add(Calendar.YEAR, 1);
 				ctemp2.add(Calendar.SECOND, 1);
 				c2.add(Calendar.SECOND, 1);
@@ -159,33 +173,29 @@ public class Escolhedor {
 		String[] cabecalho = {};
 		try {
 			s = br.readLine();
-			br.mark(5000);
+			br.mark(1000000);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
 		while (s != null) {
 			cont++;
-
-			// Cabeçalho do arquivo
 			if (cont == 1) {
 				cabecalho = s.split(separador);
 
 				for (int i = 0; i < cabecalho.length; i++) {
 
-					if (i == cabecalho.length) {
+					if (i == cabecalho.length - 1) {
 						osw.get(numeroDoArquivo).write(cabecalho[i]);
 					}
 
-					if (i != cabecalho.length) {
+					if (i != cabecalho.length - 1) {
 						osw.get(numeroDoArquivo).write(cabecalho[i] + ",");
 					}
 				}
 				osw.get(numeroDoArquivo).write("\r\n");
-				// Depois que escreve o cabeçalho, pula uma linha no arquivo
-
 			}
-			// Dados de fato
+			
 			if (cont > inicio) {
 				textoSeparado = s.split(separador);
 				Date temp = new Date();
@@ -198,31 +208,22 @@ public class Escolhedor {
 						}
 						temp = formataData(textoSeparado[coluna], formato);
 						ctemp.setTime(temp);
-						// Adicionando um milisegundo a data temporaria que foi tirada do arquivo para
-						// auxiliar na comparação
 						ctemp.add(Calendar.SECOND, 1);
-						// System.out.println("ANTES DO SE");
-						System.out.println("De : " + c1.getTime() + " até " + c2.getTime());
 
 					} catch (ParseException pe) {
 						pe.printStackTrace();
 					}
-					// System.out.println(
-					// "DATA TEMPORARIA : " + ctemp.getTime() + " E A DATA DE DIVISÃO :" +
-					// ctemp2.getTime());
 					if (ctemp.equals((ctemp2))) {
-						br.mark(5000);
-						//JOptionPane.showMessageDialog(null, "DATA PARA ONDE DEVE VOLTAR É: " + textoSeparado[coluna]);
+						br.mark(1000000);
 					}
 
 					if ((ctemp.compareTo(c1) > 0) && (ctemp.compareTo(c2) < 0)) {
-						// System.out.println("Data aceita: " + ctemp.getTime());
 						try {
 							for (int i = 0; i < textoSeparado.length; i++) {
-								if (i == textoSeparado.length) {
+								if (i == textoSeparado.length - 1) {
 									osw.get(numeroDoArquivo).write(textoSeparado[i]);
 								}
-								if (i != textoSeparado.length) {
+								if (i != textoSeparado.length - 1) {
 									osw.get(numeroDoArquivo).write(textoSeparado[i] + ",");
 								}
 							}
@@ -235,14 +236,7 @@ public class Escolhedor {
 
 						if (!textoSeparado[coluna].equals(ultimaData)) {
 							br.reset();
-							// System.out.println("REGISTRO MARCADO: " + s);
 							numeroDoArquivo++;
-							// System.out.println("-----------------------------INTERVALO " +
-							// numeroDoArquivo
-							// + "-----------------------------");
-
-							// System.out.println("Ultima data desse intervalo" + ctemp.getTime());
-							System.out.println("Gerar proximo arquivo e novo intervalo");
 
 							if (tipoIntervalo == 0) {
 								c1.add(Calendar.DAY_OF_MONTH, 1);
@@ -261,7 +255,6 @@ public class Escolhedor {
 								ctemp2.add(Calendar.YEAR, 1);
 							}
 
-							System.out.println("De : " + c1.getTime() + " até " + c2.getTime());
 							file.add(new File(caminhoFinal + numeroDoArquivo + ".csv"));
 							try {
 								os.add(new FileOutputStream(file.get(numeroDoArquivo), true));
@@ -284,22 +277,12 @@ public class Escolhedor {
 								e.printStackTrace();
 							}
 
-							/*
-							 * try { for (int i = 0; i < textoSeparado.length; i++) { if (i ==
-							 * textoSeparado.length) { osw.get(numeroDoArquivo).write(textoSeparado[i]); }
-							 * if (i != textoSeparado.length) {
-							 * osw.get(numeroDoArquivo).write(textoSeparado[i] + ","); } }
-							 * osw.get(numeroDoArquivo).write("\r\n"); } catch (IOException e) {
-							 * e.printStackTrace(); }
-							 */
-
 						}
 
 						if (textoSeparado[coluna].equals(ultimaData)) {
 							break;
 						}
 
-						// System.out.println("Data atual armazenada: " + s);
 					}
 
 				} catch (NullPointerException npe) {
@@ -330,10 +313,10 @@ public class Escolhedor {
 		try {
 			is = new FileInputStream(arquivo);
 		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
+			return null;
 		}
 		InputStreamReader isr = new InputStreamReader(is);
-		BufferedReader br = new BufferedReader(isr);
+		br = new BufferedReader(isr);
 		String s = null;
 		try {
 			s = br.readLine();
@@ -344,7 +327,6 @@ public class Escolhedor {
 		while (s != null) {
 			cont++;
 			String[] textoSeparado = s.split(separador);
-			// NÃ£o sei por que mas o mÃ©todo sÃ³ funcionou assim
 			if (cont > inicio + 1) {
 				return textoSeparado[posicao];
 			}
@@ -407,13 +389,6 @@ public class Escolhedor {
 		if (resposta == JFileChooser.APPROVE_OPTION) {
 			caminhofinal = escolheArquivo.getSelectedFile().getPath().toString();
 		}
-		// JOptionPane.showMessageDialog(null, "Efetuando PartiÃÂ§ÃÂ£o", "Aguarde",
-		// JOptionPane.INFORMATION_MESSAGE, icon);
-		/*
-		 * try { GeraIntervalo(listaDeUnidades.getSelectedItem().toString(),
-		 * listaDeDuracao.getSelectedItem().toString(),listaMetricas.getSelectedIndex(),
-		 * caminhofinal); } catch (Exception e) { e.printStackTrace(); }
-		 */
 		return caminhofinal;
 	}
 
@@ -450,10 +425,11 @@ public class Escolhedor {
 			// DJANGO
 			// DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 			// Arquivo Teste
-			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			DateFormat formatter = new SimpleDateFormat(formato);
 			date = new java.sql.Date(((java.util.Date) formatter.parse(data)).getTime());
-		} catch (ParseException e) {
-
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Certifique-se de que os parametros estão corretos","Falha no particionamento",JOptionPane.ERROR_MESSAGE);
+			return null;
 		}
 		return date;
 	}

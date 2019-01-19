@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -15,29 +14,26 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-
 import ufac.br.cronos.logic.Escolhedor;
 
-public class FramePrincipal extends JFrame implements ActionListener{
+public class FramePrincipal extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	static  String caminho,separador,inicio;
+	static String caminho, separador, inicio;
 
 	Escolhedor Es = new Escolhedor();
 
 	JButton btnBusca = new JButton();
 	JButton btnConfirma = new JButton();
-	JPanel pnlBusca,pnlMetricas,pnlIntervalo,pnlRepartir;
-	JComboBox<String> listaMetricas = new JComboBox<String>();	
+	JPanel pnlBusca, pnlMetricas, pnlIntervalo, pnlRepartir;
+	JComboBox<String> listaMetricas = new JComboBox<String>();
 	JComboBox<String> listaDeUnidades = new JComboBox<String>();
 	JComboBox<String> listaDeDuracao = new JComboBox<String>();
 	JComboBox<String> listaDeFormatos = new JComboBox<String>();
 
 	ButtonGroup bgFiltros;
 
-
-
-	public FramePrincipal(){
+	public FramePrincipal() {
 		super("Particionador de Bases de Dados");
 		this.setBackground(new Color(245));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -63,15 +59,15 @@ public class FramePrincipal extends JFrame implements ActionListener{
 		listaDeUnidades.addItem("Dia(s)");
 		listaDeUnidades.addItem("Mês(es)");
 		listaDeUnidades.addItem("Ano(s)");
-		pnlIntervalo.add(new JLabel("Duracao : "));		
+		pnlIntervalo.add(new JLabel("Duracao : "));
 		pnlIntervalo.add(listaDeDuracao);
-		pnlIntervalo.add(new JLabel("Formatos de Data aceitos : "));	
+		pnlIntervalo.add(new JLabel("Formatos de Data aceitos : "));
 		pnlIntervalo.add(listaDeFormatos);
 
 		getContentPane().add(pnlBusca);
 		getContentPane().add(pnlMetricas);
-		getContentPane().add(new JLabel("                                                  "
-				+ "                       Intervalo"));
+		getContentPane().add(
+				new JLabel("                                                  " + "                       Intervalo"));
 
 		getContentPane().add(pnlIntervalo);
 		getContentPane().add(pnlRepartir);
@@ -85,73 +81,77 @@ public class FramePrincipal extends JFrame implements ActionListener{
 		listaDeUnidades.addActionListener(this);
 		listaMetricas.addActionListener(this);
 		setLocationRelativeTo(null);
-		setVisible(true); 
+		setVisible(true);
 
 	}
-
 
 	public static void main(String[] args) {
 		FramePrincipal fp = new FramePrincipal();
 		fp.setVisible(true);
 	}
 
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==btnBusca){
+		if (e.getSource() == btnBusca) {
 			Es.DefineIntervalo(0, listaDeDuracao);
 			Es.populaFormatos(listaDeFormatos);
 			caminho = Es.EscolheArquivo();
-			if(caminho!="") {
-				inicio = JOptionPane.showInputDialog(null,"Em que linha iniciam os dados do arquivo?");
-				
-				if(inicio.isEmpty()){
-					inicio="1";
+			if (caminho != "") {
+				inicio = JOptionPane.showInputDialog(null, "Em que linha iniciam os dados do arquivo?");
+
+				if (inicio.isEmpty()) {
+					inicio = "1";
 				}
-				
-				separador = JOptionPane.showInputDialog(null,"Qual o simbolo separador do arquivo?");
-				
-				if(separador.isEmpty()){
-					separador=",";
+
+				separador = JOptionPane.showInputDialog(null, "Qual o simbolo separador do arquivo?");
+
+				if (separador.isEmpty()) {
+					separador = ",";
 				}
-				
+
 				boolean success = Es.PreencheMetricas(listaMetricas, separador, caminho, Integer.parseInt(inicio));
-				if(!success){JOptionPane.showMessageDialog(null,"Falha na captura do arquivo");}
-				if(success){
+				if (!success) {
+					JOptionPane.showMessageDialog(null, "Falha na captura do arquivo");
+				}
+				if (success) {
 					listaMetricas.setEnabled(true);
 					listaDeUnidades.setEnabled(true);
 					listaDeDuracao.setEnabled(true);
 					listaDeFormatos.setEnabled(true);
 					btnConfirma.setEnabled(true);
 				}
-			}else{
-				JOptionPane.showMessageDialog(null,"Selecione um arquivo!");
+			} else {
+				JOptionPane.showMessageDialog(null, "Selecione um arquivo!");
 			}
 		}
-		if(e.getSource()==btnConfirma){
+		if (e.getSource() == btnConfirma) {
 			String caminhoFinal = Es.EscolheArquivo();
 			File f = Es.geraArquivo(caminho);
-	
-			String d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador,Integer.parseInt(inicio));
-			String d2 = Es.pegaUltimaData(f, listaMetricas.getSelectedIndex(), separador,Integer.parseInt(inicio));
+			String d = null;
+			try {
+				d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador, Integer.parseInt(inicio));
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null, "Você precisa confirmar a operação","Falha no particionamento",JOptionPane.ERROR_MESSAGE);
+			}
 			
-			System.out.println("Primeira data do arquivo :"+d);
-			System.out.println("Ultima data do arquivo: "+d2);
+			
+			String d2 = Es.pegaUltimaData(f, listaMetricas.getSelectedIndex(), separador, Integer.parseInt(inicio));
 
 			try {
-				
-				if(Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex(), caminhoFinal, listaDeFormatos.getSelectedItem().toString(), separador, listaDeUnidades.getSelectedIndex(),Integer.parseInt(inicio),d2)){
-					JOptionPane.showMessageDialog(null, "Processamento concluido");
+
+				if (Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()),
+						listaMetricas.getSelectedIndex(), caminhoFinal, listaDeFormatos.getSelectedItem().toString(),
+						separador, listaDeUnidades.getSelectedIndex(), Integer.parseInt(inicio), d2)) {
+					JOptionPane.showMessageDialog(null, "Processamento concluido","Operação bem sucedida",JOptionPane.PLAIN_MESSAGE);
 				}
-				
+
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		}
-		if(e.getSource()==listaDeUnidades){
+		if (e.getSource() == listaDeUnidades) {
 			Es.DefineIntervalo(listaDeUnidades.getSelectedIndex(), listaDeDuracao);
 		}
 	}
-
 
 }
