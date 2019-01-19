@@ -139,7 +139,11 @@ public class FramePrincipal extends JFrame implements ActionListener{
 			System.out.println("Ultima data do arquivo: "+d2);
 
 			try {
-				Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex(), caminhoFinal, listaDeFormatos.getSelectedItem().toString(), separador, listaDeUnidades.getSelectedIndex(),Integer.parseInt(inicio),d2);
+				
+				if(Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()), listaMetricas.getSelectedIndex(), caminhoFinal, listaDeFormatos.getSelectedItem().toString(), separador, listaDeUnidades.getSelectedIndex(),Integer.parseInt(inicio),d2)){
+					JOptionPane.showMessageDialog(null, "Processamento concluido");
+				}
+				
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}

@@ -20,7 +20,6 @@ import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Escolhedor {
@@ -86,7 +85,6 @@ public class Escolhedor {
 			throws Exception {
 		int numeroDoArquivo = 0;
 		Date d1 = formataData(primeiraData, formato);
-		Date dataFinal = formataData(ultimaData, formato);
 		Calendar c2 = Calendar.getInstance();
 		Calendar c1 = Calendar.getInstance();
 		Calendar ctemp2 = Calendar.getInstance();
@@ -95,23 +93,45 @@ public class Escolhedor {
 		c2.setTime(d1);
 		ctemp2.setTime(d1);
 
-		if (tipoIntervalo == 0) {
-			c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo - 1);
-			ctemp2.add(Calendar.DAY_OF_MONTH, 1);
-			ctemp2.add(Calendar.SECOND, 1);
-			c2.add(Calendar.SECOND, 2);
-		}
-		if (tipoIntervalo == 1) {
-			c2.add(Calendar.MONTH, QuantidadeIntervalo - 1);
-			ctemp2.add(Calendar.MONTH, 1);
-			ctemp2.add(Calendar.SECOND, 1);
-			c2.add(Calendar.SECOND, 2);
-		}
-		if (tipoIntervalo == 2) {
-			c2.add(Calendar.YEAR, QuantidadeIntervalo - 1);
-			ctemp2.add(Calendar.YEAR, 1);
-			ctemp2.add(Calendar.SECOND, 1);
-			c2.add(Calendar.SECOND, 2);
+		if (formato.length()==19) {
+			if (tipoIntervalo == 0) {
+				c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo - 1);
+				ctemp2.add(Calendar.DAY_OF_MONTH, 1);
+				ctemp2.add(Calendar.SECOND, 1);
+				c2.add(Calendar.SECOND, 2);
+			}
+			if (tipoIntervalo == 1) {
+				c2.add(Calendar.MONTH, QuantidadeIntervalo - 1);
+				ctemp2.add(Calendar.MONTH, 1);
+				ctemp2.add(Calendar.SECOND, 1);
+				c2.add(Calendar.SECOND, 2);
+			}
+			if (tipoIntervalo == 2) {
+				c2.add(Calendar.YEAR, QuantidadeIntervalo );
+				ctemp2.add(Calendar.YEAR, 1);
+				ctemp2.add(Calendar.SECOND, 1);
+				c2.add(Calendar.SECOND, 2);
+			}
+
+		}else{
+			if (tipoIntervalo == 0) {
+				c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo - 1);
+				ctemp2.add(Calendar.DAY_OF_MONTH, 1);
+				ctemp2.add(Calendar.SECOND, 1);
+				c2.add(Calendar.SECOND, 1);
+			}
+			if (tipoIntervalo == 1) {
+				c2.add(Calendar.MONTH, QuantidadeIntervalo - 1);
+				ctemp2.add(Calendar.MONTH, 1);
+				ctemp2.add(Calendar.SECOND, 1);
+				c2.add(Calendar.SECOND, 1);
+			}
+			if (tipoIntervalo == 2) {
+				c2.add(Calendar.YEAR, QuantidadeIntervalo );
+				ctemp2.add(Calendar.YEAR, 1);
+				ctemp2.add(Calendar.SECOND, 1);
+				c2.add(Calendar.SECOND, 1);
+			}
 		}
 
 		InputStream is = null;
