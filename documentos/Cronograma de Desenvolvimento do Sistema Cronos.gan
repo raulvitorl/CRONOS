@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><project name="Desenvolvimento do Sistema Cronos" company="https://github.com/raulvitorl/CRONOS" webLink="http://" view-date="2018-09-01" view-index="0" gantt-divider-location="532" resource-divider-location="300" version="2.8.10" locale="pt_BR">
+    <description/>
+    <view zooming-state="default:9" id="gantt-chart">
+        <field id="tpd3" name="Nome" width="312" order="0"/>
+        <field id="tpd4" name="Data inicial" width="111" order="1"/>
+        <field id="tpd5" name="Data final" width="105" order="2"/>
+        <option id="color.recent"><![CDATA[#00ff00]]></option>
+    </view>
+    <view id="resource-table">
+        <field id="0" name="Nome" width="210" order="0"/>
+        <field id="1" name="Função" width="86" order="1"/>
+    </view>
+    <!-- -->
+    <calendars base-id="Nenhum">
+        <day-types>
+            <day-type id="0"/>
+            <day-type id="1"/>
+            <default-week id="1" name="default" sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
+            <only-show-weekends value="true"/>
+            <overriden-day-types/>
+            <days/>
+        </day-types>
+        <date year="2018" month="9" date="3" type="WORKING_DAY" color="#00ff00"><![CDATA[Inicio do Projeto]]></date>
+    </calendars>
+    <tasks empty-milestones="true">
+        <taskproperties>
+            <taskproperty id="tpd0" name="type" type="default" valuetype="icon"/>
+            <taskproperty id="tpd1" name="priority" type="default" valuetype="icon"/>
+            <taskproperty id="tpd2" name="info" type="default" valuetype="icon"/>
+            <taskproperty id="tpd3" name="name" type="default" valuetype="text"/>
+            <taskproperty id="tpd4" name="begindate" type="default" valuetype="date"/>
+            <taskproperty id="tpd5" name="enddate" type="default" valuetype="date"/>
+            <taskproperty id="tpd6" name="duration" type="default" valuetype="int"/>
+            <taskproperty id="tpd7" name="completion" type="default" valuetype="int"/>
+            <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
+            <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
+        </taskproperties>
+        <task id="5" name="Desenvolvimento do Sistema Cronos" color="#000000" meeting="false" project="true" start="2018-09-03" duration="318" complete="20" thirdDate="2018-08-01" thirdDate-constraint="0" expand="true">
+            <task id="0" name="Concepção" meeting="false" start="2018-09-03" duration="318" complete="42" expand="true">
+                <task id="1" name="Gerência de Projeto" color="#000000" meeting="false" start="2018-09-03" duration="238" complete="99" thirdDate="2018-08-01" thirdDate-constraint="0" expand="false">
+                    <task id="3" name="Cronograma" color="#8cb6ce" meeting="false" start="2019-04-28" duration="1" complete="50" thirdDate="2018-08-01" thirdDate-constraint="0" expand="true"/>
+                    <task id="4" name="Relatório de Status" color="#8cb6ce" meeting="false" start="2019-04-28" duration="1" complete="100" thirdDate="2018-08-01" thirdDate-constraint="0" expand="true"/>
+                    <task id="6" name="Plano de Projeto" color="#8cb6ce" meeting="false" start="2018-09-03" duration="139" complete="100" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                </task>
+                <task id="2" name="Engenharia de Requisitos" color="#000000" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-08-01" thirdDate-constraint="0" expand="false">
+                    <task id="7" name="Documento de Visão" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                    <task id="8" name="Glosário" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                </task>
+            </task>
+            <task id="9" name="Desenvolvimento" color="#000000" meeting="false" start="2018-09-03" duration="318" complete="18" thirdDate="2018-08-01" thirdDate-constraint="0" priority="2" expand="true">
+                <task id="10" name="Gerência de Projeto" color="#000000" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-08-01" thirdDate-constraint="0" expand="false">
+                    <task id="12" name="Relatório de Status" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                    <task id="13" name="Atualização de Cronograma" color="#8cb6ce" meeting="false" start="2019-04-28" duration="1" complete="100" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                </task>
+                <task id="14" name="Engenharia de Requisitos" color="#000000" meeting="false" start="2018-09-03" duration="318" complete="29" thirdDate="2018-08-01" thirdDate-constraint="0" expand="false">
+                    <task id="15" name="Especificação de Caso de Uso" color="#8cb6ce" meeting="false" start="2018-09-03" duration="107" complete="100" thirdDate="2018-08-01" thirdDate-constraint="0" expand="true"/>
+                    <task id="16" name="Lista de Mensagem" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                    <task id="17" name="Especificação de Interface" color="#8cb6ce" meeting="false" start="2018-09-03" duration="108" complete="100" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                    <task id="18" name="Matriz de Rastreabilidade" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                    <task id="19" name="Regra de Negócio" color="#8cb6ce" meeting="false" start="2018-09-03" duration="57" complete="100" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                </task>
+                <task id="21" name="Análise e Projeto" color="#000000" meeting="false" start="2018-10-29" duration="7" complete="100" thirdDate="2018-08-01" thirdDate-constraint="0" expand="false">
+                    <task id="22" name="Documento de Arquitetura" color="#8cb6ce" meeting="false" start="2018-10-29" duration="7" complete="100" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                    <task id="23" name="Modelo de Dados" color="#8cb6ce" meeting="false" start="2018-10-29" duration="7" complete="100" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                </task>
+                <task id="24" name="Implementação" color="#000000" meeting="false" start="2018-09-03" duration="318" complete="62" thirdDate="2018-08-01" thirdDate-constraint="0" expand="false">
+                    <task id="25" name="Protótipo" color="#8cb6ce" meeting="false" start="2018-09-03" duration="108" complete="100" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                    <task id="26" name="Código Fonte" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="50" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                </task>
+                <task id="27" name="Testes(VER e VAL)" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-08-01" thirdDate-constraint="0" priority="2" expand="false">
+                    <task id="29" name="Roteiro de Teste" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                    <task id="30" name="Evidência de Testes" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                </task>
+                <task id="31" name="Implantação" color="#000000" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-08-01" thirdDate-constraint="0" expand="false">
+                    <task id="32" name="Manual do Usuário" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                </task>
+            </task>
+            <task id="33" name="Encerramento" meeting="false" start="2018-09-03" duration="318" complete="0" expand="true">
+                <task id="34" name="Gerência de Projeto" color="#000000" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-08-01" thirdDate-constraint="0" expand="false">
+                    <task id="35" name="Relatório de Status" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                </task>
+                <task id="36" name="Integração" color="#000000" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-08-01" thirdDate-constraint="0" expand="false">
+                    <task id="37" name="Build" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                    <task id="38" name="Plano de Implantação" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                </task>
+                <task id="39" name="Implantação" color="#000000" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-08-01" thirdDate-constraint="0" expand="false">
+                    <task id="40" name="Manual de Produção" color="#8cb6ce" meeting="false" start="2018-09-03" duration="318" complete="0" thirdDate="2018-09-03" thirdDate-constraint="0" expand="true"/>
+                </task>
+            </task>
+        </task>
+    </tasks>
+    <resources>
+        <resource id="0" name="Raul Vitor Lopes da Costa" function="3" contacts="raulawliet@gmail.com" phone="(68) 99245-4310"/>
+        <resource id="1" name="Cleyciane Farias de Lima" function="1" contacts=" fariascleycianedelima@gmail.com" phone="(68) 9960-9155"/>
+        <resource id="2" name="Juliana Abreu da Cunha" function="Default:1" contacts="juliana.1419981@gmail.com" phone="(68) 9948-2156"/>
+    </resources>
+    <allocations>
+        <allocation task-id="24" resource-id="0" function="3" responsible="true" load="100.0"/>
+        <allocation task-id="31" resource-id="0" function="3" responsible="true" load="100.0"/>
+        <allocation task-id="36" resource-id="0" function="3" responsible="true" load="100.0"/>
+        <allocation task-id="39" resource-id="0" function="3" responsible="true" load="100.0"/>
+        <allocation task-id="5" resource-id="0" function="3" responsible="true" load="100.0"/>
+        <allocation task-id="2" resource-id="1" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="14" resource-id="1" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="21" resource-id="1" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="27" resource-id="1" function="1" responsible="true" load="100.0"/>
+        <allocation task-id="5" resource-id="1" function="1" responsible="false" load="100.0"/>
+        <allocation task-id="1" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="10" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="34" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="3" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="4" resource-id="2" function="Default:1" responsible="true" load="100.0"/>
+        <allocation task-id="5" resource-id="2" function="Default:1" responsible="false" load="100.0"/>
+    </allocations>
+    <vacations/>
+    <previous/>
+    <roles roleset-name="Default"/>
+    <roles>
+        <role id="1" name="Analista"/>
+        <role id="2" name="Gerente de Projeto"/>
+        <role id="3" name="Desenvolvedor"/>
+    </roles>
+</project>
