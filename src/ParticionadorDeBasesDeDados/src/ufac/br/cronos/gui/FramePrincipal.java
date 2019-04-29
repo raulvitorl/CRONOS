@@ -17,6 +17,12 @@ import javax.swing.JPanel;
 import ufac.br.cronos.logic.Escolhedor;
 
 public class FramePrincipal extends JFrame implements ActionListener {
+	
+	public static void main(String[] args) {
+		FramePrincipal fp = new FramePrincipal();
+		fp.setVisible(true);
+	}
+	
 	private static final long serialVersionUID = 1L;
 
 	static String caminho, separador, inicio;
@@ -33,6 +39,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 
 	ButtonGroup bgFiltros;
 
+	
 	public FramePrincipal() {
 		super("Particionador de Bases de Dados");
 		this.setBackground(new Color(245));
@@ -84,12 +91,6 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		setVisible(true);
 
 	}
-
-	public static void main(String[] args) {
-		FramePrincipal fp = new FramePrincipal();
-		fp.setVisible(true);
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == btnBusca) {
