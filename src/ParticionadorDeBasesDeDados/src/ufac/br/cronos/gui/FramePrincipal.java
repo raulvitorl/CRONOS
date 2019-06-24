@@ -49,7 +49,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		getContentPane().setLayout(new GridLayout(7, 1));
 		pnlBusca = new JPanel();
 		btnBusca.setText("Buscar Base");
-		btnConfirma.setText("Confirmar Divisão");
+		btnConfirma.setText("Confirmar Divisao");
 		pnlBusca.add(btnBusca);
 		pnlMetricas = new JPanel();
 		pnlRepartir = new JPanel();
@@ -64,7 +64,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		pnlIntervalo.add(new JLabel("Unidade : "));
 		pnlIntervalo.add(listaDeUnidades);
 		listaDeUnidades.addItem("Dia(s)");
-		listaDeUnidades.addItem("Mês(es)");
+		listaDeUnidades.addItem("Mes(es)");
 		listaDeUnidades.addItem("Ano(s)");
 		pnlIntervalo.add(new JLabel("Duracao : "));
 		pnlIntervalo.add(listaDeDuracao);
@@ -98,6 +98,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 			Es.populaFormatos(listaDeFormatos);
 			caminho = Es.EscolheArquivo();
 			if (caminho != "") {
+				System.out.println(caminho);
 				inicio = JOptionPane.showInputDialog(null, "Em que linha iniciam os dados do arquivo?");
 
 				if (inicio.isEmpty()) {
@@ -132,7 +133,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 			try {
 				d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador, Integer.parseInt(inicio));
 			} catch (Exception e2) {
-				JOptionPane.showMessageDialog(null, "Você precisa confirmar a operação","Falha no particionamento",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Voce precisa confirmar a operacao","Falha no particionamento",JOptionPane.ERROR_MESSAGE);
 			}
 			
 			
@@ -143,7 +144,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 				if (Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()),
 						listaMetricas.getSelectedIndex(), caminhoFinal, listaDeFormatos.getSelectedItem().toString(),
 						separador, listaDeUnidades.getSelectedIndex(), Integer.parseInt(inicio), d2)) {
-					JOptionPane.showMessageDialog(null, "Processamento concluido","Operação bem sucedida",JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Processamento concluido","Operacao bem sucedida",JOptionPane.PLAIN_MESSAGE);
 				}
 
 			} catch (Exception e1) {

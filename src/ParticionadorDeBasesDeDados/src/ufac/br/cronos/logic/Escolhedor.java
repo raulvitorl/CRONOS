@@ -99,7 +99,7 @@ public class Escolhedor {
 		try {
 			c1.setTime(d1);
 		} catch (NullPointerException npe) {
-			JOptionPane.showMessageDialog(null,"Atributo não temporal selecionado");
+			JOptionPane.showMessageDialog(null,"Atributo nao temporal selecionado");
 			return false;
 		}
 		
@@ -428,7 +428,7 @@ public class Escolhedor {
 			DateFormat formatter = new SimpleDateFormat(formato);
 			date = new java.sql.Date(((java.util.Date) formatter.parse(data)).getTime());
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Certifique-se de que os parametros estão corretos","Falha no particionamento",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Certifique-se de que os parametros estao corretos","Falha no particionamento",JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
 		return date;
