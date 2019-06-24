@@ -435,6 +435,19 @@ public class Escolhedor {
 	}
 
 	public void populaFormatos(JComboBox<String> listaDeFormatos) {
+		listaDeFormatos.addItem("BR");
+		listaDeFormatos.addItem("dd-MM-yyyy'T'HH:mm:ss'Z'");
+		listaDeFormatos.addItem("dd/MM/yyyy'T'HH:mm:ss'Z'");
+		listaDeFormatos.addItem("dd.MM.yyyy'T'HH:mm:ss'Z'");
+		listaDeFormatos.addItem("dd-MM-yyyy HH:mm:ss");
+		listaDeFormatos.addItem("dd/MM/yyyy HH:mm:ss");
+		listaDeFormatos.addItem("dd.MM.yyyy HH:mm:ss");
+		listaDeFormatos.addItem("dd-MM-yyyy HH:mm");
+		listaDeFormatos.addItem("dd/MM/yyyy HH:mm");
+		listaDeFormatos.addItem("dd.MM.yyyy HH:mm");
+		listaDeFormatos.addItem("dd-MM-yyyy");
+		listaDeFormatos.addItem("dd/MM/yyyy");
+		listaDeFormatos.addItem("dd.MM.yyyy");
 		listaDeFormatos.addItem(("EUA"));
 		listaDeFormatos.addItem("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		listaDeFormatos.addItem("yyyy/MM/dd'T'HH:mm:ss'Z'");
@@ -448,19 +461,6 @@ public class Escolhedor {
 		listaDeFormatos.addItem("YYYY-MM-DD");
 		listaDeFormatos.addItem("YYYY/MM/DD");
 		listaDeFormatos.addItem("YYYY.MM.DD");
-		listaDeFormatos.addItem("BR");
-		listaDeFormatos.addItem("dd-MM-yyyy'T'HH:mm:ss'Z'");
-		listaDeFormatos.addItem("dd/MM/yyyy'T'HH:mm:ss'Z'");
-		listaDeFormatos.addItem("dd.MM.yyyy'T'HH:mm:ss'Z'");
-		listaDeFormatos.addItem("dd-MM-yyyy HH:mm:ss");
-		listaDeFormatos.addItem("dd/MM/yyyy HH:mm:ss");
-		listaDeFormatos.addItem("dd.MM.yyyy HH:mm:ss");
-		listaDeFormatos.addItem("dd-MM-yyyy HH:mm");
-		listaDeFormatos.addItem("d/MM/yyyy HH:mm");
-		listaDeFormatos.addItem("d.MM.yyyy HH:mm");
-		listaDeFormatos.addItem("dd-MM-yyyy");
-		listaDeFormatos.addItem("dd/MM/yyyy");
-		listaDeFormatos.addItem("dd.MM.yyyy");
 	}
 
 }

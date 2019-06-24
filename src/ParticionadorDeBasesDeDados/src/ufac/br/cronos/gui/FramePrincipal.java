@@ -97,8 +97,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 			Es.DefineIntervalo(0, listaDeDuracao);
 			Es.populaFormatos(listaDeFormatos);
 			caminho = Es.EscolheArquivo();
-			if (caminho != "") {
-				System.out.println(caminho);
+			if (caminho != "") {			
 				inicio = JOptionPane.showInputDialog(null, "Em que linha iniciam os dados do arquivo?");
 
 				if (inicio.isEmpty()) {
@@ -127,6 +126,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 			}
 		}
 		if (e.getSource() == btnConfirma) {
+			LoadingFrame lf = new LoadingFrame();
 			String caminhoFinal = Es.EscolheArquivo();
 			File f = Es.geraArquivo(caminho);
 			String d = null;
@@ -138,12 +138,13 @@ public class FramePrincipal extends JFrame implements ActionListener {
 			
 			
 			String d2 = Es.pegaUltimaData(f, listaMetricas.getSelectedIndex(), separador, Integer.parseInt(inicio));
-
+			lf.setVisible(true);
 			try {
 
 				if (Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()),
 						listaMetricas.getSelectedIndex(), caminhoFinal, listaDeFormatos.getSelectedItem().toString(),
 						separador, listaDeUnidades.getSelectedIndex(), Integer.parseInt(inicio), d2)) {
+					lf.setVisible(false);
 					JOptionPane.showMessageDialog(null, "Processamento concluido","Operacao bem sucedida",JOptionPane.PLAIN_MESSAGE);
 				}
 
