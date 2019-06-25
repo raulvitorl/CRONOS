@@ -23,6 +23,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import ufac.br.cronos.gui.LoadingFrame;
+
 public class Escolhedor {
 
 	private BufferedReader br;
@@ -86,6 +88,8 @@ public class Escolhedor {
 	public boolean Particiona(File arquivoOrigem, String primeiraData, int QuantidadeIntervalo, int coluna,
 			String caminhoFinal, String formato, String separador, int tipoIntervalo, int inicio, String ultimaData)
 			throws Exception {
+		LoadingFrame lf = new LoadingFrame();
+		lf.setVisible(true);
 		int numeroDoArquivo = 0;
 		Date d1 = formataData(primeiraData, formato);
 		Calendar c2 = Calendar.getInstance();
@@ -93,12 +97,14 @@ public class Escolhedor {
 		Calendar ctemp2 = Calendar.getInstance();
 
 		if(d1==null){
-			return false;
+			lf.setVisible(false);
+			return false;			
 		}
 		
 		try {
 			c1.setTime(d1);
 		} catch (NullPointerException npe) {
+			lf.setVisible(false);
 			JOptionPane.showMessageDialog(null,"Atributo nao temporal selecionado");
 			return false;
 		}
@@ -204,6 +210,7 @@ public class Escolhedor {
 				try {
 					try {
 						if (textoSeparado.length < 2) {
+							lf.setVisible(false);
 							return false;
 						}
 						temp = formataData(textoSeparado[coluna], formato);
@@ -305,6 +312,7 @@ public class Escolhedor {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		lf.setVisible(false);
 		return true;
 	}
 
@@ -396,9 +404,6 @@ public class Escolhedor {
 		listaDeDuracao.removeAllItems();
 		switch (tipoIntervalo) {
 		case 0:
-			for (int i = 1; i < 31; i++) {
-				listaDeDuracao.addItem(Integer.toString(i));
-			}
 			break;
 		case 1:
 			for (int i = 1; i < 12; i++) {
@@ -406,7 +411,7 @@ public class Escolhedor {
 			}
 			break;
 		case 2:
-			for (int i = 1; i < 12; i++) {
+			for (int i = 1; i < 21; i++) {
 				listaDeDuracao.addItem(Integer.toString(i));
 			}
 			break;
@@ -422,9 +427,6 @@ public class Escolhedor {
 			return null;
 		java.sql.Date date = null;
 		try {
-			// DJANGO
-			// DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-			// Arquivo Teste
 			DateFormat formatter = new SimpleDateFormat(formato);
 			date = new java.sql.Date(((java.util.Date) formatter.parse(data)).getTime());
 		} catch (Exception e) {
