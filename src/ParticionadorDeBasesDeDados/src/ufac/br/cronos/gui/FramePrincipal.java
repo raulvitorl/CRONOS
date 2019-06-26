@@ -11,18 +11,21 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import ufac.br.cronos.logic.Escolhedor;
 
 public class FramePrincipal extends JFrame implements ActionListener {
-	
+
 	public static void main(String[] args) {
 		FramePrincipal fp = new FramePrincipal();
 		fp.setVisible(true);
 	}
-	
+
 	private static final long serialVersionUID = 1L;
 
 	static String caminho, separador, inicio;
@@ -39,13 +42,28 @@ public class FramePrincipal extends JFrame implements ActionListener {
 
 	ButtonGroup bgFiltros;
 
-	
+	private boolean informou;
+	// Define e adiciona dois menus drop down na barra de menus
+    JMenu InfoMenu = new JMenu("Informacoes");
+    JMenu UsabilidadeMenu = new JMenu("Informacoes");
+    // Cria uma barra de menu para o JFrame
+    JMenuBar menuBar = new JMenuBar();
+    // Cria e adiciona um item simples para o menu
+    JMenuItem SobreAction = new JMenuItem("Sobre");
+    JMenuItem TutorialAction = new JMenuItem("Tutorial");
+
 	public FramePrincipal() {
 		super("Particionador de Bases de Dados");
 		this.setBackground(new Color(245));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(500, 550);
 		this.setResizable(false);
+        // Adiciona a barra de menu ao  frame
+        setJMenuBar(menuBar);
+        menuBar.add(InfoMenu);
+        InfoMenu.add(SobreAction);
+        InfoMenu.addSeparator();
+        InfoMenu.add(TutorialAction);
 		getContentPane().setLayout(new GridLayout(7, 1));
 		pnlBusca = new JPanel();
 		btnBusca.setText("Buscar Base");
@@ -87,28 +105,58 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		btnConfirma.addActionListener(this);
 		listaDeUnidades.addActionListener(this);
 		listaMetricas.addActionListener(this);
+		SobreAction.addActionListener(this);
 		setLocationRelativeTo(null);
 		setVisible(true);
 
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+		if(e.getSource()==SobreAction) {
+			JOptionPane.showMessageDialog(null, ""
+					+ "Aplicacao desenvolvida para a disciplina de Engenharia de Software \n"
+					+ "                   Equipe : Cleyciane Frias, Juliana Abreu, Raul Vitor \n"
+					+ "                                      Universidade Federal do Acre \n"
+					+ "                                                      2018 - 2019","Sobre",JOptionPane.PLAIN_MESSAGE);
+		}
+		
+		
+		
 		if (e.getSource() == btnBusca) {
 			Es.DefineIntervalo(0, listaDeDuracao);
 			Es.populaFormatos(listaDeFormatos);
 			caminho = Es.EscolheArquivo();
 			if (caminho != "") {			
-				inicio = JOptionPane.showInputDialog(null, "Em que linha iniciam os dados do arquivo?");
+				informou = false;
 
-				if (inicio.isEmpty()) {
-					inicio = "1";
+				while(informou == false){
+					inicio = JOptionPane.showInputDialog(null, "Em que linha esta localizado o cabecalho do arquivo .csv?");
+					if(inicio==null){
+						JOptionPane.showMessageDialog(null, "Tente Novamente","Metrica Necessaria Para a Operacao",JOptionPane.ERROR_MESSAGE);
+					}else{
+						informou=true;
+					}
 				}
+				if(inicio.equals("")){
+					inicio="1";
+				}
+				
+				informou = false;
 
-				separador = JOptionPane.showInputDialog(null, "Qual o simbolo separador do arquivo?");
-
+				while(informou == false){
+					separador = JOptionPane.showInputDialog(null, "Qual o simbolo separador do arquivo?");
+					if(separador==null){
+						JOptionPane.showMessageDialog(null, "Tente Novamente","Metrica Necessaria Para a Operacao",JOptionPane.ERROR_MESSAGE);
+					}else{
+						informou=true;
+					}
+				}
 				if (separador.isEmpty()) {
 					separador = ",";
-				}
+				}				
+
+				
 
 				boolean success = Es.PreencheMetricas(listaMetricas, separador, caminho, Integer.parseInt(inicio));
 				if (!success) {
@@ -126,7 +174,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 			}
 		}
 		if (e.getSource() == btnConfirma) {
-			
+
 			String caminhoFinal = Es.EscolheArquivo();
 			File f = Es.geraArquivo(caminho);
 			String d = null;
@@ -135,17 +183,26 @@ public class FramePrincipal extends JFrame implements ActionListener {
 			} catch (Exception e2) {
 				JOptionPane.showMessageDialog(null, "Voce precisa confirmar a operacao","Falha no particionamento",JOptionPane.ERROR_MESSAGE);
 			}
-			
-			
+
+
 			String d2 = Es.pegaUltimaData(f, listaMetricas.getSelectedIndex(), separador, Integer.parseInt(inicio));
-			
+
 			try {
-				
+
 				if (Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()),
 						listaMetricas.getSelectedIndex(), caminhoFinal, listaDeFormatos.getSelectedItem().toString(),
 						separador, listaDeUnidades.getSelectedIndex(), Integer.parseInt(inicio), d2)) {
-					
+
 					JOptionPane.showMessageDialog(null, "Processamento concluido","Operacao bem sucedida",JOptionPane.PLAIN_MESSAGE);
+					int i = JOptionPane.showConfirmDialog(null, "Deseja Realizar Outra Operação?", "Opções", JOptionPane.YES_NO_OPTION);
+					if(i == JOptionPane.YES_OPTION) {
+						
+					}
+					else if(i == JOptionPane.NO_OPTION) {
+					   JOptionPane.showMessageDialog(null, "Obrigado por utilizar o Cronos!", "Agradecimento", JOptionPane.INFORMATION_MESSAGE);
+					   System.exit(0);
+					}
+					
 				}
 
 			} catch (Exception e1) {

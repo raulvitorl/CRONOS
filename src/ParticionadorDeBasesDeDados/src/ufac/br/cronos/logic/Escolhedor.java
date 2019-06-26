@@ -411,7 +411,7 @@ public class Escolhedor {
 			}
 			break;
 		case 2:
-			for (int i = 1; i < 21; i++) {
+			for (int i = 1; i < 51; i++) {
 				listaDeDuracao.addItem(Integer.toString(i));
 			}
 			break;
