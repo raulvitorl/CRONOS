@@ -106,6 +106,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		listaDeUnidades.addActionListener(this);
 		listaMetricas.addActionListener(this);
 		SobreAction.addActionListener(this);
+		TutorialAction.addActionListener(this);
 		setLocationRelativeTo(null);
 		setVisible(true);
 
@@ -119,6 +120,10 @@ public class FramePrincipal extends JFrame implements ActionListener {
 					+ "                   Equipe : Cleyciane Frias, Juliana Abreu, Raul Vitor \n"
 					+ "                                      Universidade Federal do Acre \n"
 					+ "                                                      2018 - 2019","Sobre",JOptionPane.PLAIN_MESSAGE);
+		}
+		
+		if(e.getSource()==TutorialAction){
+			Tutorial t = new Tutorial();
 		}
 		
 		
