@@ -452,7 +452,7 @@ public class Escolhedor {
 	}
 
 	public void populaFormatos(JComboBox<String> listaDeFormatos) {
-		listaDeFormatos.addItem("BR");
+		listaDeFormatos.addItem("Formatos BRASILEIROS de Datas: ");
 		listaDeFormatos.addItem("dd-MM-yyyy'T'HH:mm:ss'Z'");
 		listaDeFormatos.addItem("dd/MM/yyyy'T'HH:mm:ss'Z'");
 		listaDeFormatos.addItem("dd.MM.yyyy'T'HH:mm:ss'Z'");
@@ -465,7 +465,7 @@ public class Escolhedor {
 		listaDeFormatos.addItem("dd-MM-yyyy");
 		listaDeFormatos.addItem("dd/MM/yyyy");
 		listaDeFormatos.addItem("dd.MM.yyyy");
-		listaDeFormatos.addItem(("EUA"));
+		listaDeFormatos.addItem(("Formato NORTE AMERICANOS de Datas:"));
 		listaDeFormatos.addItem("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		listaDeFormatos.addItem("yyyy/MM/dd'T'HH:mm:ss'Z'");
 		listaDeFormatos.addItem("yyyy.MM.dd'T'HH:mm:ss'Z'");

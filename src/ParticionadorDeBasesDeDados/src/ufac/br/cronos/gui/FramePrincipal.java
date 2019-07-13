@@ -93,7 +93,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		pnlIntervalo.add(listaDeFormatos);
 
 		getContentPane().add(pnlBusca);
-		add(new JLabel("                                       Selecione um atributo temporal do tipo DATA"));
+		add(new JLabel("                                     Selecione um atributo temporal do tipo DATA abaixo"));
 		getContentPane().add(pnlMetricas);
 		getContentPane().add(
 				new JLabel("                                                  " + "                       Intervalo"));
@@ -133,7 +133,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 
 
 		if (e.getSource() == btnBusca) {
-			Es.DefineIntervalo(0, listaDeDuracao);
+			Es.DefineIntervalo(1, listaDeDuracao);
 			Es.populaFormatos(listaDeFormatos);
 			caminho = Es.EscolheArquivo();
 			if (caminho != "") {			
@@ -243,9 +243,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 			}
 
 		}
-		if (e.getSource() == listaDeUnidades) {
-			Es.DefineIntervalo(listaDeUnidades.getSelectedIndex(), listaDeDuracao);
-		}
+		
 	}
 
 }
