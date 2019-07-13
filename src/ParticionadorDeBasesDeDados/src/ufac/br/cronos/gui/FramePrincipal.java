@@ -69,6 +69,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		getContentPane().setLayout(new GridLayout(7, 1));
 		pnlBusca = new JPanel();
 		btnBusca.setText("Buscar Base");
+		btnBusca.setToolTipText("Aqui voce busca pelo seu arquivo .CSV que sera particionado");
 		btnConfirma.setText("Confirmar Divisao");
 		pnlBusca.add(btnBusca);
 		pnlMetricas = new JPanel();
@@ -79,18 +80,22 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		pnlRepartir.add(new JLabel(""));
 		
 		pnlMetricas.add(listaMetricas);
+		listaMetricas.setToolTipText("Aqui voce seleciona o atributo que vai usar como base para o particionamento");
 		pnlIntervalo = new JPanel();
 		pnlIntervalo.setLayout(new GridLayout(4, 2));
 
 		pnlIntervalo.add(new JLabel("Unidade : "));
 		pnlIntervalo.add(listaDeUnidades);
+		listaDeUnidades.setToolTipText("Defina aqui se serao Meses ou Anos na sua divisao");
 		listaDeUnidades.addItem("Selecione...");
 		listaDeUnidades.addItem("Mes(es)");
 		listaDeUnidades.addItem("Ano(s)");
 		pnlIntervalo.add(new JLabel("Duracao : "));
 		pnlIntervalo.add(listaDeDuracao);
+		listaDeDuracao.setToolTipText("Defina o intervalo com um numero inteiro");
 		pnlIntervalo.add(new JLabel("Formatos de Data aceitos : "));
 		pnlIntervalo.add(listaDeFormatos);
+		listaDeFormatos.setToolTipText("Aqui voce seleciona o formato do seu atributo temporal.\n Da uma olhadinha no arquivo antes pra evitar erros!");
 
 		getContentPane().add(pnlBusca);
 		add(new JLabel("                                     Selecione um atributo temporal do tipo DATA abaixo"));
@@ -100,6 +105,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 
 		getContentPane().add(pnlIntervalo);
 		getContentPane().add(pnlRepartir);
+		btnConfirma.setToolTipText("Selecione o diretorio de salvamento e nome padrao dos arquivos resultantes do processo");
 		listaDeDuracao.setEnabled(false);
 		listaDeFormatos.setEnabled(false);
 		listaDeUnidades.setEnabled(false);
