@@ -17,6 +17,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.sun.org.apache.bcel.internal.generic.GOTO;
+
 import ufac.br.cronos.logic.Escolhedor;
 
 public class FramePrincipal extends JFrame implements ActionListener {
@@ -44,13 +46,13 @@ public class FramePrincipal extends JFrame implements ActionListener {
 
 	private boolean informou;
 	// Define e adiciona dois menus drop down na barra de menus
-    JMenu InfoMenu = new JMenu("Informacoes");
-    JMenu UsabilidadeMenu = new JMenu("Informacoes");
-    // Cria uma barra de menu para o JFrame
-    JMenuBar menuBar = new JMenuBar();
-    // Cria e adiciona um item simples para o menu
-    JMenuItem SobreAction = new JMenuItem("Sobre");
-    JMenuItem TutorialAction = new JMenuItem("Tutorial");
+	JMenu InfoMenu = new JMenu("Informacoes");
+	JMenu UsabilidadeMenu = new JMenu("Informacoes");
+	// Cria uma barra de menu para o JFrame
+	JMenuBar menuBar = new JMenuBar();
+	// Cria e adiciona um item simples para o menu
+	JMenuItem SobreAction = new JMenuItem("Sobre");
+	JMenuItem TutorialAction = new JMenuItem("Tutorial");
 
 	public FramePrincipal() {
 		super("Particionador de Bases de Dados");
@@ -58,12 +60,12 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(500, 550);
 		this.setResizable(false);
-        // Adiciona a barra de menu ao  frame
-        setJMenuBar(menuBar);
-        menuBar.add(InfoMenu);
-        InfoMenu.add(SobreAction);
-        InfoMenu.addSeparator();
-        InfoMenu.add(TutorialAction);
+		// Adiciona a barra de menu ao  frame
+		setJMenuBar(menuBar);
+		menuBar.add(InfoMenu);
+		InfoMenu.add(SobreAction);
+		InfoMenu.addSeparator();
+		InfoMenu.add(TutorialAction);
 		getContentPane().setLayout(new GridLayout(7, 1));
 		pnlBusca = new JPanel();
 		btnBusca.setText("Buscar Base");
@@ -75,6 +77,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		pnlRepartir.add(new JLabel(""));
 		pnlRepartir.add(btnConfirma);
 		pnlRepartir.add(new JLabel(""));
+		
 		pnlMetricas.add(listaMetricas);
 		pnlIntervalo = new JPanel();
 		pnlIntervalo.setLayout(new GridLayout(4, 2));
@@ -90,6 +93,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		pnlIntervalo.add(listaDeFormatos);
 
 		getContentPane().add(pnlBusca);
+		add(new JLabel("                                       Selecione um atributo temporal do tipo DATA"));
 		getContentPane().add(pnlMetricas);
 		getContentPane().add(
 				new JLabel("                                                  " + "                       Intervalo"));
@@ -113,7 +117,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		if(e.getSource()==SobreAction) {
 			JOptionPane.showMessageDialog(null, ""
 					+ "Aplicacao desenvolvida para a disciplina de Engenharia de Software \n"
@@ -121,13 +125,13 @@ public class FramePrincipal extends JFrame implements ActionListener {
 					+ "                                      Universidade Federal do Acre \n"
 					+ "                                                      2018 - 2019","Sobre",JOptionPane.PLAIN_MESSAGE);
 		}
-		
+
 		if(e.getSource()==TutorialAction){
 			Tutorial t = new Tutorial();
 		}
-		
-		
-		
+
+
+
 		if (e.getSource() == btnBusca) {
 			Es.DefineIntervalo(0, listaDeDuracao);
 			Es.populaFormatos(listaDeFormatos);
@@ -146,7 +150,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 				if(inicio.equals("")){
 					inicio="1";
 				}
-				
+
 				informou = false;
 
 				while(informou == false){
@@ -161,7 +165,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 					separador = ",";
 				}				
 
-				
+
 
 				boolean success = Es.PreencheMetricas(listaMetricas, separador, caminho, Integer.parseInt(inicio));
 				if (!success) {
@@ -179,40 +183,65 @@ public class FramePrincipal extends JFrame implements ActionListener {
 			}
 		}
 		if (e.getSource() == btnConfirma) {
+			String campos = "";
+			int invalido=0;
 
-			String caminhoFinal = Es.EscolheArquivo();
-			File f = Es.geraArquivo(caminho);
-			String d = null;
-			try {
-				d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador, Integer.parseInt(inicio));
-			} catch (Exception e2) {
-				JOptionPane.showMessageDialog(null, "Voce precisa confirmar a operacao","Falha no particionamento",JOptionPane.ERROR_MESSAGE);
+			if(listaDeUnidades.getSelectedIndex()<1){
+				campos = "\nUnidade\n";
+				invalido=1;
 			}
 
+			if(listaDeFormatos.getSelectedIndex()<1){
+				campos += "Formato";
+				invalido=1;
+			}
 
-			String d2 = Es.pegaUltimaData(f, listaMetricas.getSelectedIndex(), separador, Integer.parseInt(inicio));
+			if(invalido==1){
+				JOptionPane.showMessageDialog(null, "Preencha os campos :"+campos, "Erro na parametrizacao", JOptionPane.ERROR_MESSAGE);
 
-			try {
+			}
 
-				if (Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()),
-						listaMetricas.getSelectedIndex(), caminhoFinal, listaDeFormatos.getSelectedItem().toString(),
-						separador, listaDeUnidades.getSelectedIndex(), Integer.parseInt(inicio), d2)) {
+			if (invalido!=1) {
+				String caminhoFinal = Es.EscolheArquivo();
 
-					JOptionPane.showMessageDialog(null, "Processamento concluido","Operacao bem sucedida",JOptionPane.PLAIN_MESSAGE);
-					int i = JOptionPane.showConfirmDialog(null, "Deseja Realizar Outra Operação?", "Opções", JOptionPane.YES_NO_OPTION);
-					if(i == JOptionPane.YES_OPTION) {
-						
+				if (!caminhoFinal.equals("")) {
+					File f = Es.geraArquivo(caminho);
+					String d = null;
+					try {
+						d = Es.pegaPrimeiraData(f, listaMetricas.getSelectedIndex(), separador, Integer.parseInt(inicio));
+					} catch (Exception e2) {
+						JOptionPane.showMessageDialog(null, "Voce precisa confirmar a operacao","Falha no particionamento",JOptionPane.ERROR_MESSAGE);
 					}
-					else if(i == JOptionPane.NO_OPTION) {
-					   JOptionPane.showMessageDialog(null, "Obrigado por utilizar o Cronos!", "Agradecimento", JOptionPane.INFORMATION_MESSAGE);
-					   System.exit(0);
+
+
+					String d2 = Es.pegaUltimaData(f, listaMetricas.getSelectedIndex(), separador, Integer.parseInt(inicio));
+
+					try {
+
+						if (Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()),
+								listaMetricas.getSelectedIndex(), caminhoFinal, listaDeFormatos.getSelectedItem().toString(),
+								separador, listaDeUnidades.getSelectedIndex(), Integer.parseInt(inicio), d2)) {
+
+							JOptionPane.showMessageDialog(null, "Processamento concluido","Operacao bem sucedida",JOptionPane.PLAIN_MESSAGE);
+							int i = JOptionPane.showConfirmDialog(null, "Deseja Realizar Outra Operação?", "Opções", JOptionPane.YES_NO_OPTION);
+							if(i == JOptionPane.YES_OPTION) {
+
+							}
+							else if(i == JOptionPane.NO_OPTION) {
+								JOptionPane.showMessageDialog(null, "Obrigado por utilizar o Cronos!", "Agradecimento", JOptionPane.INFORMATION_MESSAGE);
+								System.exit(0);
+							}
+
+						}
+
+					} catch (Exception e1) {
+						e1.printStackTrace();
 					}
-					
 				}
 
-			} catch (Exception e1) {
-				e1.printStackTrace();
+
 			}
+
 		}
 		if (e.getSource() == listaDeUnidades) {
 			Es.DefineIntervalo(listaDeUnidades.getSelectedIndex(), listaDeDuracao);

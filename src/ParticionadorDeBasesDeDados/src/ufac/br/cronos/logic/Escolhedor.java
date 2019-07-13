@@ -102,14 +102,16 @@ public class Escolhedor {
 		lf.setVisible(true);
 		int numeroDoArquivo = 0;
 		Date d1 = formataData(primeiraData, formato);
+		if(d1==null){
+			lf.setVisible(false);
+			return false;			
+		}		
+		
 		Calendar c2 = Calendar.getInstance();
 		Calendar c1 = Calendar.getInstance();
 		Calendar ctemp2 = Calendar.getInstance();
 
-		if(d1==null){
-			lf.setVisible(false);
-			return false;			
-		}
+		
 		
 		try {
 			c1.setTime(d1);
@@ -218,18 +220,17 @@ public class Escolhedor {
 				Calendar ctemp = Calendar.getInstance();
 
 				try {
-					try {
-						if (textoSeparado.length < 2) {
-							lf.setVisible(false);
-							return false;
-						}
-						temp = formataData(textoSeparado[coluna], formato);
-						ctemp.setTime(temp);
-						ctemp.add(Calendar.SECOND, 1);
-
-					} catch (ParseException pe) {
-						pe.printStackTrace();
+					if (textoSeparado.length < 2) {
+						lf.setVisible(false);
+						return false;
 					}
+					temp = formataData(textoSeparado[coluna], formato);
+					
+					if (temp==null)
+						return false;
+					
+					ctemp.setTime(temp);
+					ctemp.add(Calendar.SECOND, 1);
 					if (ctemp.equals((ctemp2))) {
 						br.mark(1000000);
 					}
@@ -432,17 +433,21 @@ public class Escolhedor {
 		return true;
 	}
 
-	public static java.sql.Date formataData(String data, String formato) throws Exception {
+	public static java.sql.Date formataData(String data, String formato){
 		if (data == null || data.equals(""))
 			return null;
 		java.sql.Date date = null;
+		DateFormat formatter;
+		formatter = new SimpleDateFormat(formato);		
+			
 		try {
-			DateFormat formatter = new SimpleDateFormat(formato);
 			date = new java.sql.Date(((java.util.Date) formatter.parse(data)).getTime());
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Certifique-se de que os parametros estao corretos","Falha no particionamento",JOptionPane.ERROR_MESSAGE);
+		} catch (ParseException pe) {
+			JOptionPane.showMessageDialog(null, "Verifique: \nAtributo Selecionado\nFormato da Data", "Falha ao Acessar Datas", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
+		
+		
 		return date;
 	}
 
