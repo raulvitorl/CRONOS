@@ -140,7 +140,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 				informou = false;
 
 				while(informou == false){
-					inicio = JOptionPane.showInputDialog(null, "Em que linha esta localizado o cabecalho do arquivo .csv?");
+					inicio = JOptionPane.showInputDialog(null, "Informe a linha em que esta localizado o cabecalho do arquivo .csv");
 					if(inicio==null){
 						JOptionPane.showMessageDialog(null, "Tente Novamente","Metrica Necessaria Para a Operacao",JOptionPane.ERROR_MESSAGE);
 					}else{
@@ -154,7 +154,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 				informou = false;
 
 				while(informou == false){
-					separador = JOptionPane.showInputDialog(null, "Qual o simbolo separador do arquivo?");
+					separador = JOptionPane.showInputDialog(null, "Insira o simbolo separador do arquivo");
 					if(separador==null){
 						JOptionPane.showMessageDialog(null, "Tente Novamente","Metrica Necessaria Para a Operacao",JOptionPane.ERROR_MESSAGE);
 					}else{
@@ -223,12 +223,12 @@ public class FramePrincipal extends JFrame implements ActionListener {
 								separador, listaDeUnidades.getSelectedIndex(), Integer.parseInt(inicio), d2)) {
 
 							JOptionPane.showMessageDialog(null, "Processamento concluido","Operacao bem sucedida",JOptionPane.PLAIN_MESSAGE);
-							int i = JOptionPane.showConfirmDialog(null, "Deseja Realizar Outra Operação?", "Opções", JOptionPane.YES_NO_OPTION);
+							int i = JOptionPane.showConfirmDialog(null, "Deseja Realizar Outra Operacao?", "Opcoes", JOptionPane.YES_NO_OPTION);
 							if(i == JOptionPane.YES_OPTION) {
 
 							}
 							else if(i == JOptionPane.NO_OPTION) {
-								JOptionPane.showMessageDialog(null, "Obrigado por utilizar o Cronos!", "Agradecimento", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Obrigado por utilizar o Cronos", "Agradecimento", JOptionPane.INFORMATION_MESSAGE);
 								System.exit(0);
 							}
 
