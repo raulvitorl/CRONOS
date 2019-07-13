@@ -34,8 +34,18 @@ public class Escolhedor {
 		listaMetricas.removeAllItems();
 		JFileChooser escolheArquivo = new JFileChooser();
 		FileNameExtensionFilter filtro = new FileNameExtensionFilter("*csv", "csv");
+		
+		
+		
 		escolheArquivo.setFileFilter(filtro);
 		File file = new File(caminho);
+
+		
+		if (!((caminho.charAt(caminho.length()-1)=='v') && (caminho.charAt(caminho.length()-2)=='s') && (caminho.charAt(caminho.length()-3)=='c'))){
+			JOptionPane.showMessageDialog(null, "Formato : "+caminho.charAt(caminho.length()-3)+caminho.charAt(caminho.length()-2)+caminho.charAt(caminho.length()-1)+"   Identificado \n Selecione um arquivo .CSV", "Arquivo nao CSV selecionado", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		
 		InputStream is = null;
 		try {
 			is = new FileInputStream(file);
