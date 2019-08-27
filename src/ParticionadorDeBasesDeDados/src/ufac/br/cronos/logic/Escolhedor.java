@@ -239,9 +239,7 @@ public class Escolhedor {
 					ctemp.add(Calendar.SECOND, 1);
 					
 
-					final DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-
-					
+		
 					
 					Calendar ctest = Calendar.getInstance();
 					ctest = (Calendar) c2.clone();
