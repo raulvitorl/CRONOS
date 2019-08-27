@@ -17,7 +17,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.sun.org.apache.bcel.internal.generic.GOTO;
 
 import ufac.br.cronos.logic.Escolhedor;
 
@@ -40,6 +39,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 	JComboBox<String> listaMetricas = new JComboBox<String>();
 	JComboBox<String> listaDeUnidades = new JComboBox<String>();
 	JComboBox<String> listaDeDuracao = new JComboBox<String>();
+	JComboBox<String> tamanhoIntervalo = new JComboBox<String>();
 	JComboBox<String> listaDeFormatos = new JComboBox<String>();
 
 	ButtonGroup bgFiltros;
@@ -53,6 +53,8 @@ public class FramePrincipal extends JFrame implements ActionListener {
 	// Cria e adiciona um item simples para o menu
 	JMenuItem SobreAction = new JMenuItem("Sobre");
 	JMenuItem TutorialAction = new JMenuItem("Tutorial");
+
+	private Tutorial t;
 
 	public FramePrincipal() {
 		super("Particionador de Bases de Dados");
@@ -92,6 +94,8 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		listaDeUnidades.addItem("Ano(s)");
 		pnlIntervalo.add(new JLabel("Duracao : "));
 		pnlIntervalo.add(listaDeDuracao);
+		pnlIntervalo.add(new JLabel("Intervalo : "));
+		pnlIntervalo.add(tamanhoIntervalo);
 		listaDeDuracao.setToolTipText("Defina o intervalo com um numero inteiro");
 		pnlIntervalo.add(new JLabel("Formatos de Data aceitos : "));
 		pnlIntervalo.add(listaDeFormatos);
@@ -107,6 +111,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		getContentPane().add(pnlRepartir);
 		btnConfirma.setToolTipText("Selecione o diretorio de salvamento e nome padrao dos arquivos resultantes do processo");
 		listaDeDuracao.setEnabled(false);
+		tamanhoIntervalo.setEnabled(false);
 		listaDeFormatos.setEnabled(false);
 		listaDeUnidades.setEnabled(false);
 		btnConfirma.setEnabled(false);
@@ -133,13 +138,14 @@ public class FramePrincipal extends JFrame implements ActionListener {
 		}
 
 		if(e.getSource()==TutorialAction){
-			Tutorial t = new Tutorial();
+			setT(new Tutorial());
 		}
 
 
 
 		if (e.getSource() == btnBusca) {
 			Es.DefineIntervalo(1, listaDeDuracao);
+			Es.DefineIntervalo(3, tamanhoIntervalo);
 			Es.populaFormatos(listaDeFormatos);
 			caminho = Es.EscolheArquivo();
 			if (caminho != "") {			
@@ -183,6 +189,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 					listaDeDuracao.setEnabled(true);
 					listaDeFormatos.setEnabled(true);
 					btnConfirma.setEnabled(true);
+					tamanhoIntervalo.setEnabled(true);
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Selecione um arquivo!");
@@ -226,7 +233,7 @@ public class FramePrincipal extends JFrame implements ActionListener {
 
 						if (Es.Particiona(f, d, Integer.parseInt(listaDeDuracao.getSelectedItem().toString()),
 								listaMetricas.getSelectedIndex(), caminhoFinal, listaDeFormatos.getSelectedItem().toString(),
-								separador, listaDeUnidades.getSelectedIndex(), Integer.parseInt(inicio), d2)) {
+								separador, listaDeUnidades.getSelectedIndex(), Integer.parseInt(inicio), d2, Integer.parseInt(tamanhoIntervalo.getSelectedItem().toString()))) {
 
 							JOptionPane.showMessageDialog(null, "Processamento concluido","Operacao bem sucedida",JOptionPane.PLAIN_MESSAGE);
 							int i = JOptionPane.showConfirmDialog(null, "Deseja Realizar Outra Operacao?", "Opcoes", JOptionPane.YES_NO_OPTION);
@@ -250,6 +257,12 @@ public class FramePrincipal extends JFrame implements ActionListener {
 
 		}
 		
+	}
+	public Tutorial getT() {
+		return t;
+	}
+	public void setT(Tutorial t) {
+		this.t = t;
 	}
 
 }
