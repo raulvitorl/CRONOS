@@ -99,8 +99,7 @@ public class Escolhedor {
 			String caminhoFinal, String formato, String separador, int tipoIntervalo, int inicio, String ultimaData,int tamanhoIntervalo)
 					throws Exception {
 
-		System.out.println("PULAR DE :"+ tamanhoIntervalo+" EM "+tamanhoIntervalo);
-		System.out.println("FORMATO: "+formato);
+
 
 		LoadingFrame lf = new LoadingFrame();
 		lf.setVisible(true);
@@ -242,18 +241,16 @@ public class Escolhedor {
 
 					final DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
-					System.out.println("SE "+ temp+" ENTRE "+df.format(c1.getTime())+" E "+df.format(c2.getTime()));
+					
 					
 					Calendar ctest = Calendar.getInstance();
 					ctest = (Calendar) c2.clone();
 					ctest.add(Calendar.SECOND,-2);
-					System.out.println(temp.compareTo(ctest.getTime()));
 					
-					System.out.println("	TEMP : "+ temp+" CTEST :  "+df.format(ctest.getTime()));
 					
 					if(temp.compareTo(ctest.getTime())==0 || temp.compareTo(ctest.getTime())==1){
 						
-						System.out.println("IGUAIS!!!!!!");
+					
 
 						if (tipoIntervalo == 1) {
 							c1.add(Calendar.MONTH, tamanhoIntervalo);
@@ -292,7 +289,7 @@ public class Escolhedor {
 						}
 					}					
 					if ((ctemp.compareTo(c1) > 0) && (ctemp.compareTo(c2) < 0)) {
-						System.out.println("DATA ACEITA: "+df.format(ctemp.getTime()));
+						
 						try {
 							for (int i = 0; i < textoSeparado.length; i++) {
 								if (i == textoSeparado.length - 1) {
