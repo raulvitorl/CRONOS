@@ -35,14 +35,15 @@ public class Escolhedor {
 		JFileChooser escolheArquivo = new JFileChooser();
 		FileNameExtensionFilter filtro = new FileNameExtensionFilter("*csv", "csv");
 
-
-
 		escolheArquivo.setFileFilter(filtro);
 		File file = new File(caminho);
 
-
-		if (!((caminho.charAt(caminho.length()-1)=='v') && (caminho.charAt(caminho.length()-2)=='s') && (caminho.charAt(caminho.length()-3)=='c'))){
-			JOptionPane.showMessageDialog(null, "Formato : "+caminho.charAt(caminho.length()-3)+caminho.charAt(caminho.length()-2)+caminho.charAt(caminho.length()-1)+"   Identificado \n Selecione um arquivo .CSV", "Arquivo nao CSV selecionado", JOptionPane.ERROR_MESSAGE);
+		if (!((caminho.charAt(caminho.length() - 1) == 'v') && (caminho.charAt(caminho.length() - 2) == 's')
+				&& (caminho.charAt(caminho.length() - 3) == 'c'))) {
+			JOptionPane.showMessageDialog(null,
+					"Formato : " + caminho.charAt(caminho.length() - 3) + caminho.charAt(caminho.length() - 2)
+							+ caminho.charAt(caminho.length() - 1) + "   Identificado \n Selecione um arquivo .CSV",
+					"Arquivo nao CSV selecionado", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
@@ -96,79 +97,61 @@ public class Escolhedor {
 	}
 
 	public boolean Particiona(File arquivoOrigem, String primeiraData, int QuantidadeIntervalo, int coluna,
-			String caminhoFinal, String formato, String separador, int tipoIntervalo, int inicio, String ultimaData,int tamanhoIntervalo)
-					throws Exception {
+			String caminhoFinal, String formato, String separador, int tipoIntervalo, int inicio, String ultimaData,
+			int tamanhoIntervalo) throws Exception {
 
-
+		System.out.println("PULAR DE :" + tamanhoIntervalo + " EM " + tamanhoIntervalo);
+		System.out.println("FORMATO: " + formato);
 
 		LoadingFrame lf = new LoadingFrame();
 		lf.setVisible(true);
 		int numeroDoArquivo = 0;
 		Date d1 = formataData(primeiraData, formato);
-		if(d1==null){
+		if (d1 == null) {
 			lf.setVisible(false);
-			return false;			
-		}		
+			return false;
+		}
 
 		Calendar c2 = Calendar.getInstance();
 		Calendar c1 = Calendar.getInstance();
-		Calendar ctemp2 = Calendar.getInstance();
-
-
 
 		try {
 			c1.setTime(d1);
 		} catch (NullPointerException npe) {
 			lf.setVisible(false);
-			JOptionPane.showMessageDialog(null,"Atributo nao temporal selecionado");
+			JOptionPane.showMessageDialog(null, "Atributo nao temporal selecionado");
 			return false;
 		}
 
-
 		c2.setTime(d1);
-		ctemp2.setTime(d1);
 
 		if (formato.length() == 19) {
-			if (tipoIntervalo == 0) {
-				c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo - 1);
-				c2.add(Calendar.SECOND, 2);
-
-				ctemp2.add(Calendar.DAY_OF_MONTH, 1);
-				ctemp2.add(Calendar.SECOND, 1);
-			}
 			if (tipoIntervalo == 1) {
-				c2.add(Calendar.MONTH, QuantidadeIntervalo - 1);
-				ctemp2.add(Calendar.MONTH, 1);
-				ctemp2.add(Calendar.SECOND, 1);
+				c2.add(Calendar.MONTH, QuantidadeIntervalo);
+				;
 				c2.add(Calendar.SECOND, 2);
 			}
 			if (tipoIntervalo == 2) {
 				c2.add(Calendar.YEAR, QuantidadeIntervalo);
-				ctemp2.add(Calendar.YEAR, 1);
-				ctemp2.add(Calendar.SECOND, 1);
 				c2.add(Calendar.SECOND, 2);
 			}
 
 		} else {
-			if (tipoIntervalo == 0) {
-				c2.add(Calendar.DAY_OF_MONTH, QuantidadeIntervalo - 1);
-				ctemp2.add(Calendar.DAY_OF_MONTH, 1);
-				ctemp2.add(Calendar.SECOND, 1);
-				c2.add(Calendar.SECOND, 1);
-			}
+
 			if (tipoIntervalo == 1) {
-				c2.add(Calendar.MONTH, QuantidadeIntervalo - 1);
-				ctemp2.add(Calendar.MONTH, 1);
-				ctemp2.add(Calendar.SECOND, 1);
+				c2.add(Calendar.MONTH, QuantidadeIntervalo);
 				c2.add(Calendar.SECOND, 1);
 			}
 			if (tipoIntervalo == 2) {
 				c2.add(Calendar.YEAR, QuantidadeIntervalo);
-				ctemp2.add(Calendar.YEAR, 1);
-				ctemp2.add(Calendar.SECOND, 1);
 				c2.add(Calendar.SECOND, 1);
 			}
 		}
+
+		final DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
+		System.out.println("DATA INICIAL : " + df.format(d1));
+		System.out.println("DATA FINAL" + df.format(c2.getTime()));
 
 		InputStream is = null;
 		ArrayList<File> file = new ArrayList<File>();
@@ -195,7 +178,7 @@ public class Escolhedor {
 		String[] cabecalho = {};
 		try {
 			s = br.readLine();
-			br.mark(1000000);
+			br.mark(10000000);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -223,47 +206,52 @@ public class Escolhedor {
 				textoSeparado = s.split(separador);
 				Date temp = new Date();
 
-
 				try {
 					if (textoSeparado.length < 2) {
 						lf.setVisible(false);
 						return false;
 					}
-					
+
 					temp = formataData(textoSeparado[coluna], formato);
 
-					if (temp==null)
+					if (temp == null)
 						return false;
 
 					ctemp.setTime(temp);
 					ctemp.add(Calendar.SECOND, 1);
-					
 
-		
-					
+					System.out.println(
+							"SE " + temp + " ENTRE " + df.format(c1.getTime()) + " E " + df.format(c2.getTime()));
+
 					Calendar ctest = Calendar.getInstance();
 					ctest = (Calendar) c2.clone();
-					ctest.add(Calendar.SECOND,-2);
-					
-					
-					if(temp.compareTo(ctest.getTime())==0 || temp.compareTo(ctest.getTime())==1){
-						
-					
+					ctest.add(Calendar.SECOND, -2);
+
+					System.out.println(temp.compareTo(ctest.getTime()));
+
+					System.out.println("	TEMP : " + temp + " CTEST :  " + df.format(ctest.getTime()));
+					System.out.println(" ANTES DE ENTRAR NO IGUAIS :" + df.format(c1.getTime()));
+
+					if (temp.compareTo(ctest.getTime()) == 0 || temp.compareTo(ctest.getTime()) == 1) {
+
+						br.reset();
+						System.out.println("IGUAIS!!!!!!");
 
 						if (tipoIntervalo == 1) {
-							c1.add(Calendar.MONTH, tamanhoIntervalo);
-							c2.add(Calendar.MONTH, tamanhoIntervalo);
-							ctemp2.add(Calendar.MONTH, tamanhoIntervalo);
+							c1.add(Calendar.MONTH, 3);
+							c2.add(Calendar.MONTH, 3);
+
 						}
 						if (tipoIntervalo == 2) {
-							c1.add(Calendar.YEAR, tamanhoIntervalo);
-							c2.add(Calendar.YEAR, tamanhoIntervalo);
-							ctemp2.add(Calendar.YEAR, tamanhoIntervalo);
+							c1.add(Calendar.YEAR, 3);
+							c2.add(Calendar.YEAR, 3);
+
 						}
 
-						
+						System.out.println("DEPOIS DE ENTRAR NO IGUAIS :" + df.format(c1.getTime()));
+
 						numeroDoArquivo++;
-						
+
 						file.add(new File(caminhoFinal + numeroDoArquivo + ".csv"));
 						try {
 							os.add(new FileOutputStream(file.get(numeroDoArquivo), true));
@@ -285,9 +273,9 @@ public class Escolhedor {
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
-					}					
+					}
 					if ((ctemp.compareTo(c1) > 0) && (ctemp.compareTo(c2) < 0)) {
-						
+						System.out.println("DATA ACEITA: " + df.format(ctemp.getTime()));
 						try {
 							for (int i = 0; i < textoSeparado.length; i++) {
 								if (i == textoSeparado.length - 1) {
@@ -445,20 +433,20 @@ public class Escolhedor {
 		return true;
 	}
 
-	public static java.sql.Date formataData(String data, String formato){
+	public static java.sql.Date formataData(String data, String formato) {
 		if (data == null || data.equals(""))
 			return null;
 		java.sql.Date date = null;
 		DateFormat formatter;
-		formatter = new SimpleDateFormat(formato);		
+		formatter = new SimpleDateFormat(formato);
 
 		try {
 			date = new java.sql.Date(((java.util.Date) formatter.parse(data)).getTime());
 		} catch (ParseException pe) {
-			JOptionPane.showMessageDialog(null, "Verifique: \nAtributo Selecionado\nFormato da Data", "Falha ao Acessar Datas", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Verifique: \nAtributo Selecionado\nFormato da Data",
+					"Falha ao Acessar Datas", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
-
 
 		return date;
 	}
