@@ -16,14 +16,18 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import ufac.br.cronos.logic.Picker;
 
 public class MainFrame extends JFrame implements ActionListener {
 
 	public static void main(String[] args) {
+		@SuppressWarnings("unused")
 		MainFrame fp = new MainFrame();
-		fp.setVisible(true);
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -53,16 +57,58 @@ public class MainFrame extends JFrame implements ActionListener {
 	JMenuItem SobreAction = new JMenuItem("About");
 
 	public MainFrame() {
-		super("Database Partitioner");
-		this.setBackground(new Color(245));
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(500, 550);
-		this.setResizable(false);
+		JFrame frame = new JFrame();
+		frame.setTitle("Database Partitioner");
+		frame.setBackground(new Color(245));
+		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		frame.setSize(500, 550);
+		frame.setResizable(false);
+
+		JComboBox<String> cmbDemo = new JComboBox<String>();
+		cmbDemo.addItem("One");
+		cmbDemo.addItem("Two");
+		cmbDemo.addItem("Three");
+
 		// Adiciona a barra de menu ao frame
-		setJMenuBar(menuBar);
+		frame.setJMenuBar(menuBar);
+
+		JMenu mnuLaf = new JMenu("Look and feel");
+		JRadioButtonMenuItem mniNimbus = new JRadioButtonMenuItem("Nimbus");
+		JRadioButtonMenuItem mniMetal = new JRadioButtonMenuItem("Metal");
+		JRadioButtonMenuItem mniSystem = new JRadioButtonMenuItem("Systems");
+
+		ButtonGroup btnGroup = new ButtonGroup();
+		btnGroup.add(mniNimbus);
+		btnGroup.add(mniMetal);
+		btnGroup.add(mniSystem);
+		menuBar.add(mnuLaf);
+
+		mnuLaf.add(mniNimbus);
+		mnuLaf.add(mniMetal);
+		mnuLaf.add(mniSystem);
+
+		mniNimbus.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				changeLaf(frame, "nimbus");
+			}
+		});
+		mniMetal.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				changeLaf(frame, "metal");
+			}
+		});
+		mniSystem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				changeLaf(frame, "system");
+			}
+		});
+
 		menuBar.add(InfoMenu);
 		InfoMenu.add(SobreAction);
-		getContentPane().setLayout(new GridLayout(7, 1));
+		frame.setLayout(new GridLayout(7, 1));
 		pnlBusca = new JPanel();
 		btnBusca.setText("Search Base");
 		btnBusca.setToolTipText("Here you search for your .CSV file that will be partitioned.");
@@ -97,15 +143,16 @@ public class MainFrame extends JFrame implements ActionListener {
 		listaDeFormatos.setToolTipText(
 				"Here you select the format of your temporal attribute. \\ N Take a look at the file first to avoid errors!");
 
-		getContentPane().add(pnlBusca);
-		add(new JLabel("                                     Select a DATE type temporal attribute below"));
-		getContentPane().add(pnlMetricas);
-		getContentPane().add(
-				new JLabel("                                                  " + "                       Interval"));
+		frame.add(pnlBusca);
+		frame.add(new JLabel("                                     Select a DATE type temporal attribute below"));
+		frame.add(pnlMetricas);
+		frame.add(new JLabel("                                                  " + "                       Interval"));
 
-		getContentPane().add(pnlIntervalo);
-		getContentPane().add(pnlRepartir);
+		frame.add(pnlIntervalo);
+		frame.add(pnlRepartir);
+
 		btnConfirma.setToolTipText("Select the save directory and default name of the resulting files");
+
 		listaDeDuracao.setEnabled(false);
 		tamanhoIntervalo.setEnabled(false);
 		listaDeFormatos.setEnabled(false);
@@ -117,9 +164,8 @@ public class MainFrame extends JFrame implements ActionListener {
 		listaDeUnidades.addActionListener(this);
 		listaMetricas.addActionListener(this);
 		SobreAction.addActionListener(this);
-		setLocationRelativeTo(null);
-		setVisible(true);
-
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 	}
 
 	@Override
@@ -256,4 +302,35 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 
 	}
+
+	// Teste
+	public static void changeLaf(JFrame frame, String laf) {
+		if (laf.equals("metal")) {
+			try {
+				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException e) {
+				e.printStackTrace();
+			}
+		}
+		if (laf.equals("nimbus")) {
+			try {
+				UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException e) {
+				e.printStackTrace();
+			}
+		}
+		if (laf.equals("system")) {
+			try {
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+					| UnsupportedLookAndFeelException e) {
+				e.printStackTrace();
+			}
+		}
+
+		SwingUtilities.updateComponentTreeUI(frame);
+	}
+
 }
