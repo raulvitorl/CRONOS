@@ -100,6 +100,10 @@ public class Escolhedor {
 			String caminhoFinal, String formato, String separador, int tipoIntervalo, int inicio, String ultimaData,
 			int tamanhoIntervalo) throws Exception {
 
+		final int valor = tamanhoIntervalo;
+
+		JOptionPane.showMessageDialog(null, "VALOR : " + valor);
+
 		System.out.println("PULAR DE :" + tamanhoIntervalo + " EM " + tamanhoIntervalo);
 		System.out.println("FORMATO: " + formato);
 
@@ -128,7 +132,6 @@ public class Escolhedor {
 		if (formato.length() == 19) {
 			if (tipoIntervalo == 1) {
 				c2.add(Calendar.MONTH, QuantidadeIntervalo);
-				;
 				c2.add(Calendar.SECOND, 2);
 			}
 			if (tipoIntervalo == 2) {
@@ -182,7 +185,7 @@ public class Escolhedor {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-
+		int numeroDaLinha = 0;
 		while (s != null) {
 			cont++;
 			if (cont == 1) {
@@ -199,6 +202,7 @@ public class Escolhedor {
 					}
 				}
 				osw.get(numeroDoArquivo).write("\r\n");
+				numeroDaLinha++;
 			}
 
 			Calendar ctemp = Calendar.getInstance();
@@ -236,15 +240,16 @@ public class Escolhedor {
 
 						br.reset();
 						System.out.println("IGUAIS!!!!!!");
+						numeroDaLinha = 0;
 
 						if (tipoIntervalo == 1) {
-							c1.add(Calendar.MONTH, 3);
-							c2.add(Calendar.MONTH, 3);
+							c1.add(Calendar.MONTH, valor);
+							c2.add(Calendar.MONTH, valor);
 
 						}
 						if (tipoIntervalo == 2) {
-							c1.add(Calendar.YEAR, 3);
-							c2.add(Calendar.YEAR, 3);
+							c1.add(Calendar.YEAR, valor);
+							c2.add(Calendar.YEAR, valor);
 
 						}
 
@@ -275,19 +280,43 @@ public class Escolhedor {
 						}
 					}
 					if ((ctemp.compareTo(c1) > 0) && (ctemp.compareTo(c2) < 0)) {
-						System.out.println("DATA ACEITA: " + df.format(ctemp.getTime()));
-						try {
-							for (int i = 0; i < textoSeparado.length; i++) {
-								if (i == textoSeparado.length - 1) {
-									osw.get(numeroDoArquivo).write(textoSeparado[i]);
+						numeroDaLinha++;
+
+						// Se for o primeiro arquivo pode fazer tudo sem problemas
+						if (numeroDoArquivo == 0) {
+							System.out.println("DATA ACEITA: " + df.format(ctemp.getTime()));
+							try {
+								for (int i = 0; i < textoSeparado.length; i++) {
+									if (i == textoSeparado.length - 1) {
+										osw.get(numeroDoArquivo).write(textoSeparado[i]);
+									}
+									if (i != textoSeparado.length - 1) {
+										osw.get(numeroDoArquivo).write(textoSeparado[i] + ",");
+									}
 								}
-								if (i != textoSeparado.length - 1) {
-									osw.get(numeroDoArquivo).write(textoSeparado[i] + ",");
-								}
+								osw.get(numeroDoArquivo).write("\r\n");
+							} catch (IOException e) {
+								e.printStackTrace();
 							}
-							osw.get(numeroDoArquivo).write("\r\n");
-						} catch (IOException e) {
-							e.printStackTrace();
+						}
+
+						//Se o arquivo for outro, escreve a linha 0 que e o cabecalho, conta uma linha pra ignorar que eh a 1,
+						//e depois disso pode escrever tranquilo
+						if (numeroDoArquivo > 0 && numeroDaLinha>1) {
+							System.out.println("DATA ACEITA: " + df.format(ctemp.getTime()));
+							try {
+								for (int i = 0; i < textoSeparado.length; i++) {
+									if (i == textoSeparado.length - 1) {
+										osw.get(numeroDoArquivo).write(textoSeparado[i]);
+									}
+									if (i != textoSeparado.length - 1) {
+										osw.get(numeroDoArquivo).write(textoSeparado[i] + ",");
+									}
+								}
+								osw.get(numeroDoArquivo).write("\r\n");
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
 						}
 
 					} else {
