@@ -102,11 +102,6 @@ public class Escolhedor {
 
 		final int valor = tamanhoIntervalo;
 
-		JOptionPane.showMessageDialog(null, "VALOR : " + valor);
-
-		System.out.println("PULAR DE :" + tamanhoIntervalo + " EM " + tamanhoIntervalo);
-		System.out.println("FORMATO: " + formato);
-
 		LoadingFrame lf = new LoadingFrame();
 		lf.setVisible(true);
 		int numeroDoArquivo = 0;
@@ -150,11 +145,6 @@ public class Escolhedor {
 				c2.add(Calendar.SECOND, 1);
 			}
 		}
-
-		final DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-
-		System.out.println("DATA INICIAL : " + df.format(d1));
-		System.out.println("DATA FINAL" + df.format(c2.getTime()));
 
 		InputStream is = null;
 		ArrayList<File> file = new ArrayList<File>();
@@ -224,22 +214,14 @@ public class Escolhedor {
 					ctemp.setTime(temp);
 					ctemp.add(Calendar.SECOND, 1);
 
-					System.out.println(
-							"SE " + temp + " ENTRE " + df.format(c1.getTime()) + " E " + df.format(c2.getTime()));
-
 					Calendar ctest = Calendar.getInstance();
 					ctest = (Calendar) c2.clone();
 					ctest.add(Calendar.SECOND, -2);
 
-					System.out.println(temp.compareTo(ctest.getTime()));
-
-					System.out.println("	TEMP : " + temp + " CTEST :  " + df.format(ctest.getTime()));
-					System.out.println(" ANTES DE ENTRAR NO IGUAIS :" + df.format(c1.getTime()));
 
 					if (temp.compareTo(ctest.getTime()) == 0 || temp.compareTo(ctest.getTime()) == 1) {
 
 						br.reset();
-						System.out.println("IGUAIS!!!!!!");
 						numeroDaLinha = 0;
 
 						if (tipoIntervalo == 1) {
@@ -253,7 +235,6 @@ public class Escolhedor {
 
 						}
 
-						System.out.println("DEPOIS DE ENTRAR NO IGUAIS :" + df.format(c1.getTime()));
 
 						numeroDoArquivo++;
 
@@ -284,7 +265,6 @@ public class Escolhedor {
 
 						// Se for o primeiro arquivo pode fazer tudo sem problemas
 						if (numeroDoArquivo == 0) {
-							System.out.println("DATA ACEITA: " + df.format(ctemp.getTime()));
 							try {
 								for (int i = 0; i < textoSeparado.length; i++) {
 									if (i == textoSeparado.length - 1) {
@@ -303,7 +283,6 @@ public class Escolhedor {
 						//Se o arquivo for outro, escreve a linha 0 que e o cabecalho, conta uma linha pra ignorar que eh a 1,
 						//e depois disso pode escrever tranquilo
 						if (numeroDoArquivo > 0 && numeroDaLinha>1) {
-							System.out.println("DATA ACEITA: " + df.format(ctemp.getTime()));
 							try {
 								for (int i = 0; i < textoSeparado.length; i++) {
 									if (i == textoSeparado.length - 1) {
