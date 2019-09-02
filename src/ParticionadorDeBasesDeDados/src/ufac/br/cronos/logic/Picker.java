@@ -25,7 +25,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import ufac.br.cronos.gui.LoadingFrame;
 
-public class Escolhedor {
+public class Picker {
 
 	private BufferedReader br;
 
@@ -41,9 +41,9 @@ public class Escolhedor {
 		if (!((caminho.charAt(caminho.length() - 1) == 'v') && (caminho.charAt(caminho.length() - 2) == 's')
 				&& (caminho.charAt(caminho.length() - 3) == 'c'))) {
 			JOptionPane.showMessageDialog(null,
-					"Formato : " + caminho.charAt(caminho.length() - 3) + caminho.charAt(caminho.length() - 2)
-							+ caminho.charAt(caminho.length() - 1) + "   Identificado \n Selecione um arquivo .CSV",
-					"Arquivo nao CSV selecionado", JOptionPane.ERROR_MESSAGE);
+					"Format : " + caminho.charAt(caminho.length() - 3) + caminho.charAt(caminho.length() - 2)
+							+ caminho.charAt(caminho.length() - 1) + "   Identified \n Select a .CSV File",
+					"Non CSV file selected", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
@@ -118,7 +118,7 @@ public class Escolhedor {
 			c1.setTime(d1);
 		} catch (NullPointerException npe) {
 			lf.setVisible(false);
-			JOptionPane.showMessageDialog(null, "Atributo nao temporal selecionado");
+			JOptionPane.showMessageDialog(null, "Selected non-temporal attribute");
 			return false;
 		}
 
@@ -451,7 +451,7 @@ public class Escolhedor {
 		try {
 			date = new java.sql.Date(((java.util.Date) formatter.parse(data)).getTime());
 		} catch (ParseException pe) {
-			JOptionPane.showMessageDialog(null, "Verifique: \nAtributo Selecionado\nFormato da Data",
+			JOptionPane.showMessageDialog(null, "Check: \nSelected Attribute\nDate Format",
 					"Falha ao Acessar Datas", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
@@ -460,7 +460,7 @@ public class Escolhedor {
 	}
 
 	public void populaFormatos(JComboBox<String> listaDeFormatos) {
-		listaDeFormatos.addItem("Formatos BRASILEIROS de Datas: ");
+		listaDeFormatos.addItem("BRAZILIAN DATES FORMATS: ");
 		listaDeFormatos.addItem("dd-MM-yyyy'T'HH:mm:ss'Z'");
 		listaDeFormatos.addItem("dd/MM/yyyy'T'HH:mm:ss'Z'");
 		listaDeFormatos.addItem("dd.MM.yyyy'T'HH:mm:ss'Z'");
@@ -473,7 +473,7 @@ public class Escolhedor {
 		listaDeFormatos.addItem("dd-MM-yyyy");
 		listaDeFormatos.addItem("dd/MM/yyyy");
 		listaDeFormatos.addItem("dd.MM.yyyy");
-		listaDeFormatos.addItem(("Formato NORTE AMERICANOS de Datas:"));
+		listaDeFormatos.addItem(("US DATES FORMATS:"));
 		listaDeFormatos.addItem("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		listaDeFormatos.addItem("yyyy/MM/dd'T'HH:mm:ss'Z'");
 		listaDeFormatos.addItem("yyyy.MM.dd'T'HH:mm:ss'Z'");
