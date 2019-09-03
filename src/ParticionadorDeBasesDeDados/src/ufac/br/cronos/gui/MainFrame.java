@@ -64,10 +64,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		frame.setSize(500, 550);
 		frame.setResizable(false);
 
-		JComboBox<String> cmbDemo = new JComboBox<String>();
-		cmbDemo.addItem("One");
-		cmbDemo.addItem("Two");
-		cmbDemo.addItem("Three");
 
 		// Adiciona a barra de menu ao frame
 		frame.setJMenuBar(menuBar);
