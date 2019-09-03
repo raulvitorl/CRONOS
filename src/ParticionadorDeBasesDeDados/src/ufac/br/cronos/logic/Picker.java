@@ -473,7 +473,8 @@ public class Picker {
 		listaDeFormatos.addItem("dd-MM-yyyy");
 		listaDeFormatos.addItem("dd/MM/yyyy");
 		listaDeFormatos.addItem("dd.MM.yyyy");
-		listaDeFormatos.addItem(("US DATES FORMATS:"));
+		
+		listaDeFormatos.addItem(("US DATES FORMATS YEAR:"));
 		listaDeFormatos.addItem("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		listaDeFormatos.addItem("yyyy/MM/dd'T'HH:mm:ss'Z'");
 		listaDeFormatos.addItem("yyyy.MM.dd'T'HH:mm:ss'Z'");
@@ -486,6 +487,25 @@ public class Picker {
 		listaDeFormatos.addItem("YYYY-MM-DD");
 		listaDeFormatos.addItem("YYYY/MM/DD");
 		listaDeFormatos.addItem("YYYY.MM.DD");
+		
+		listaDeFormatos.addItem(("US DATES FORMATS MONTH:"));
+		listaDeFormatos.addItem("MM-dd-yyyy'T'HH:mm:ss'Z'");
+		listaDeFormatos.addItem("MM/dd/yyyy'T'HH:mm:ss'Z'");
+		listaDeFormatos.addItem("MM.dd.yyyy'T'HH:mm:ss'Z'");
+		
+		listaDeFormatos.addItem("MM-dd-yyyy HH:mm:ss");
+		listaDeFormatos.addItem("MM/dd/yyyy HH:mm:ss");
+		listaDeFormatos.addItem("MM.dd.yyyy HH:mm:ss");
+		
+		listaDeFormatos.addItem("MM-dd-yyyy HH:mm");
+		listaDeFormatos.addItem("MM/dd/yyyy HH:mm");
+		listaDeFormatos.addItem("MM.dd.yyyy HH:mm");
+		
+		listaDeFormatos.addItem("MM-dd-yyyy");
+		listaDeFormatos.addItem("MM/dd/yyyy");
+		listaDeFormatos.addItem("MM.dd.yyyy");
+	
+		
 	}
 
 }

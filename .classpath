@@ -6,6 +6,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src/ParticionadorDeBasesDeDados/src"/>
-	<classpathentry exported="true" kind="lib" path="JTattoo-1.6.11.jar"/>
 	<classpathentry kind="output" path="src/ParticionadorDeBasesDeDados/bin"/>
 </classpath>
